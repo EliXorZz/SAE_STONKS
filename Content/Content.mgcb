@@ -1,0 +1,98 @@
+
+#----------------------------- Global Properties ----------------------------#
+
+/outputDir:bin/$(Platform)
+/intermediateDir:obj/$(Platform)
+/platform:DesktopGL
+/config:
+/profile:Reach
+/compress:False
+
+#-------------------------------- References --------------------------------#
+
+/reference:..\..\..\.nuget\packages\monogame.extended.content.pipeline\3.8.0\tools\MonoGame.Extended.Content.Pipeline.dll
+/reference:..\..\..\.nuget\packages\monogame.extended.content.pipeline\3.8.0\tools\MonoGame.Extended.dll
+/reference:..\..\..\.nuget\packages\monogame.extended.content.pipeline\3.8.0\tools\MonoGame.Extended.Graphics.dll
+/reference:..\..\..\.nuget\packages\monogame.extended.content.pipeline\3.8.0\tools\MonoGame.Extended.Tiled.dll
+/reference:..\..\..\.nuget\packages\monogame.extended.content.pipeline\3.8.0\tools\Newtonsoft.Json.dll
+
+#---------------------------------- Content ---------------------------------#
+
+#begin fonts/File.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:fonts/File.spritefont;fonts/font.spritefont
+
+#begin maps/default/map_default.tmx
+/importer:TiledMapImporter
+/processor:TiledMapProcessor
+/build:maps/default/map_default.tmx
+
+#begin maps/default/tileset_default.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:maps/default/tileset_default.png
+
+#begin sprites/blue_character/animations.sf
+/importer:SpriteFactoryContentImporter
+/processor:SpriteFactoryContentProcessor
+/processorParam:ContentType=MonoGame.Extended MonoGame.Extended.Animations.SpriteFactory.SpriteFactoryFileReader, MonoGame.Extended.Animations
+/build:sprites/blue_character/animations.sf
+
+#begin sprites/blue_character/texture.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:sprites/blue_character/texture.png
+
+#begin sprites/goblin/animations.sf
+/importer:SpriteFactoryContentImporter
+/processor:SpriteFactoryContentProcessor
+/processorParam:ContentType=MonoGame.Extended MonoGame.Extended.Animations.SpriteFactory.SpriteFactoryFileReader, MonoGame.Extended.Animations
+/build:sprites/goblin/animations.sf
+
+#begin sprites/goblin/texture.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:sprites/goblin/texture.png
+
+#begin sprites/squelette/animations.sf
+/importer:SpriteFactoryContentImporter
+/processor:SpriteFactoryContentProcessor
+/processorParam:ContentType=MonoGame.Extended MonoGame.Extended.Animations.SpriteFactory.SpriteFactoryFileReader, MonoGame.Extended.Animations
+/build:sprites/squelette/animations.sf
+
+#begin sprites/squelette/texture.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:sprites/squelette/texture.png
+
