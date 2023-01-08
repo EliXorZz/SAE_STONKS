@@ -26,6 +26,12 @@ namespace TheGame.Manager
             _monsters.Add(monster);
             _entityManager.CreateEntity(monster);
         }
+        
+        public void RemoveMonster(Monster monster)
+        {
+            _monsters.Remove(monster);
+            _entityManager.RemoveEntity(monster);
+        }
 
         public List<Monster> GetNearbyMonsters(Entity source, float distance)
         {

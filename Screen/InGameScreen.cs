@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Diagnostics;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Screens;
@@ -25,26 +26,25 @@ namespace TheGame.Screen
             _camera = new Camera(1);
         }
 
-        public override void LoadContent()
+        public override void Initialize()
         {
-            Player player = new Player(_game, new PlayerControls(Keys.Left, Keys.Right, Keys.Up), "Joueur 1");
-            _game.PlayerManager.CreatePlayer(player);
-
-            Goblin goblin = new Goblin(_game);
-            _game.MonsterManager.CreateMonster(goblin);
+            _game.IsMouseVisible = true;
         }
 
         public override void Update(GameTime gameTime)
         {
             _game.MapManager.Update(gameTime);
             _game.EntityManager.Update(gameTime);
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+                _game.ScreenStateManager.CurrentScreen = ScreenState.PauseMenu;
         }
 
         public override void Draw(GameTime gameTime)
         {
             _uiSpriteBatch.Begin();
             _mainSpriteBatch.Begin(transformMatrix: _camera.Matrix);
-            
+
             _game.MapManager.Draw(_camera);
             _game.EntityManager.Draw(_mainSpriteBatch, _uiSpriteBatch);
             

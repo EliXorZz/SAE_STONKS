@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Diagnostics;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended.Content;
@@ -8,15 +8,21 @@ using MonoGame.Extended.Sprites;
 using MonoGame.Extended.Screens;
 using TheGame.Manager;
 using TheGame.Screen;
+using TheGame.UI.Components;
 
 namespace TheGame.Core
 {
     public abstract class Entity
     {
-        private AnimatedSprite _sprite;
+        private MainGame _game;
+        private Random _random;
         
-        private string _animation;
+        private AnimatedSprite _sprite;
 
+        private string _animation;
+        
+        private List<FadeInterfaceComponent> _interfaceComponents;
+        
         private Vector2 _velocity;
 
         private Vector2 _position;
@@ -24,7 +30,7 @@ namespace TheGame.Core
 
         private int _health;
         private int _maxHealth;
-        
+
         private int _damage;
         private float _damageCooldown;
         private float _currentDamageCooldown;
@@ -32,6 +38,9 @@ namespace TheGame.Core
         public Entity(MainGame game, string spriteName, Vector2 position,
             float gravity, int health, int damage, float damageCooldown)
         {
+            _game = game;
+            _random = new Random();
+            
             ScreenStateManager screenStateManager = game.ScreenStateManager;
             GameScreen inGameScreen = screenStateManager.GetScreen(ScreenState.InGame);
             
@@ -39,11 +48,12 @@ namespace TheGame.Core
                 .Load<SpriteSheet>($"sprites/{spriteName}/animations.sf", new JsonContentLoader());
             
             _sprite = new AnimatedSprite(spriteSheet);
-
             _sprite.Origin = Vector2.Zero;
             
             _animation = "idle";
 
+            _interfaceComponents = new List<FadeInterfaceComponent>();
+            
             _velocity = Vector2.Zero;
 
             _position = position;
@@ -51,7 +61,7 @@ namespace TheGame.Core
 
             _health = health;
             _maxHealth = health;
-            
+
             _damage = damage;
             _damageCooldown = damageCooldown;
             
@@ -96,6 +106,11 @@ namespace TheGame.Core
             get => _maxHealth;
         }
         
+        public bool IsDead
+        {
+            get => _health <= 0;
+        }
+
         public int Damage
         {
             get => _damage;
@@ -111,6 +126,13 @@ namespace TheGame.Core
         public float CurrentDamageCooldown
         {
             get => _currentDamageCooldown;
+        }
+        
+        public void AddFadeInterfaceComponent(float delay, float time, Vector2 offset, InterfaceComponent component)
+        {
+            _interfaceComponents.Add(
+                new FadeInterfaceComponent(delay, time, this, offset, component)
+            );
         }
 
         public Rectangle GetBounds()
@@ -134,7 +156,7 @@ namespace TheGame.Core
             return Vector2.Distance(GetCenter(), entity.GetCenter());
         }
 
-        public bool IsCollisionMap(Map map, int offsetY = 0)
+        public bool IsCollisionMap(Map map, int offsetX = 0, int offsetY = 0)
         {
             Rectangle bounds = GetBounds();
 
@@ -142,9 +164,9 @@ namespace TheGame.Core
             {
                 for (int y = 0; y < bounds.Height; y++)
                 {
-                    ushort tX = (ushort) ((bounds.X + x) / map.TiledMap.TileWidth);
+                    ushort tX = (ushort) ((bounds.X + x + offsetX) / map.TiledMap.TileWidth);
                     ushort tY = (ushort) ((bounds.Y + y + offsetY) / map.TiledMap.TileHeight);
-
+                    
                     if (map.GetTile(MapLayer.GROUND, tX, tY).HasValue)
                         return true;
                 }
@@ -153,13 +175,23 @@ namespace TheGame.Core
             return false;
         }
 
-        public void Attack(Entity entity)
+        public bool Attack(Entity entity)
         {
             if (CurrentDamageCooldown <= 0)
             {
-                entity.Health -= Damage;
+                int realDamage = _random.Next(1, Damage);
+                
+                entity.Health -= realDamage;
                 _currentDamageCooldown = DamageCooldown;
+
+                entity.AddFadeInterfaceComponent(
+                    200,
+                    1500,
+                    new Vector2(0, -3), 
+                    new Text(_game, ScreenState.InGame, "font", 0, 0, $"-{realDamage}", Color.Red));
             }
+
+            return CurrentDamageCooldown >= DamageCooldown - 1800;
         }
         
         public virtual void Update(GameTime gameTime, Map map)
@@ -167,8 +199,6 @@ namespace TheGame.Core
             float elapsed = (float) gameTime.ElapsedGameTime.TotalMilliseconds;
             _currentDamageCooldown = Math.Max(0, _currentDamageCooldown - elapsed);
 
-            Debug.WriteLine(_currentDamageCooldown);
-            
             Position += Velocity;
             
             if (IsCollisionMap(map))
@@ -185,6 +215,18 @@ namespace TheGame.Core
             else
                 Velocity.Y += Gravity;
 
+            List<FadeInterfaceComponent> removeComponents = new List<FadeInterfaceComponent>();
+            foreach (FadeInterfaceComponent component in _interfaceComponents)
+            {
+                bool finish = component.Update(gameTime);
+                
+                if (finish)
+                    removeComponents.Add(component);
+            }
+            
+            foreach (FadeInterfaceComponent component in removeComponents)
+                _interfaceComponents.Remove(component);
+            
             Sprite.Play(Animation);
             Sprite.Update(gameTime);
         }
@@ -192,6 +234,9 @@ namespace TheGame.Core
         public virtual void Draw(SpriteBatch mainSpriteBatch, SpriteBatch uiSpriteBatch)
         {
             mainSpriteBatch.Draw(Sprite, Position);
+            
+            foreach (FadeInterfaceComponent component in _interfaceComponents)
+                component.Draw(mainSpriteBatch);
         }
     }
 }

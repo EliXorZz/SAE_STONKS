@@ -8,13 +8,15 @@ namespace TheGame.Core
         private Keys _right;
 
         private Keys _jump;
+        private Keys _attack;
 
-        public PlayerControls(Keys left, Keys right, Keys jump)
+        public PlayerControls(Keys left, Keys right, Keys jump, Keys attack)
         {
             _left = left;
             _right = right;
             
             _jump = jump;
+            _attack = attack;
         }
 
         public bool IsLeft()
@@ -30,6 +32,11 @@ namespace TheGame.Core
         public bool IsJump()
         {
             return Keyboard.GetState().IsKeyDown(_jump);
+        }
+        
+        public bool IsAttack()
+        {
+            return Keyboard.GetState().IsKeyDown(_attack);
         }
     }
 }

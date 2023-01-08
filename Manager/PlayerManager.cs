@@ -20,14 +20,20 @@ namespace TheGame.Manager
             get => _players;
         }
 
-        public void CreatePlayer(Player player)
+        public void CreatePlayer(MainGame game, PlayerControls controls, string pseudo)
         {
-            player.Id = GetNextId();
-            
+            Player player = new Player(game, controls, GetNextId(), pseudo, Vector2.Zero);
+
             _entityManager.RandomPosition(player);
             
             _entityManager.CreateEntity(player);
             _players.Add(player);
+        }
+
+        public void RemovePlayer(Player player)
+        {
+            _players.Remove(player);
+            _entityManager.RemoveEntity(player);
         }
         
         public List<Player> GetNearbyPlayers(Entity source, float distance)

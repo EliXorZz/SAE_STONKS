@@ -6,21 +6,21 @@ namespace TheGame.UI.Components
     public class RectangleShape : InterfaceComponent
     {
         private Texture2D _texture;
-
-        private int _x, _y;
+        
         private int _width, _height;
 
         private Color _color;
         
-        public RectangleShape(Game game, int x, int y, int width, int height, Color color)
+        public RectangleShape(MainGame game, int x, int y, int width, int height, Color color)
         {
             _texture = new Texture2D(game.GraphicsDevice, 1, 1);
             _texture.SetData(new Color[] { Color.White });
-            
-            _x = x;
-            _y = y;
+
             _width = width;
             _height = height;
+            
+            X = x;
+            Y = y;
             
             _color = color;
         }
@@ -28,18 +28,6 @@ namespace TheGame.UI.Components
         public Texture2D Texture
         {
             get => _texture;
-        }
-
-        public int X
-        {
-            get => _x;
-            set => _x = value;
-        }
-
-        public int Y
-        {
-            get => _y;
-            set => _y = value;
         }
 
         public int Width
@@ -59,7 +47,7 @@ namespace TheGame.UI.Components
             get => _color;
             set => _color = value;
         }
-
+        
         public override void Draw(SpriteBatch spriteBatch)
         {
             Rectangle rectangle = new Rectangle(X, Y, Width, Height);

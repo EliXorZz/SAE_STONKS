@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
-using System.Diagnostics;
 using TheGame.Core;
 
 namespace TheGame.Manager
@@ -12,6 +11,8 @@ namespace TheGame.Manager
         private MapManager _mapManager;
         
         private List<Entity> _entities;
+        private List<Entity> _entitiesToRemove;
+        
         private Random _random;
 
         public EntityManager(MapManager mapManager)
@@ -19,6 +20,8 @@ namespace TheGame.Manager
             _mapManager = mapManager;
             
             _entities = new List<Entity>();
+            _entitiesToRemove = new List<Entity>();
+            
             _random = new Random();
         }
 
@@ -34,7 +37,7 @@ namespace TheGame.Manager
         
         public void RemoveEntity(Entity entity)
         {
-            _entities.Remove(entity);
+            _entitiesToRemove.Add(entity);
         }
 
         public void RandomPosition(Entity entity)
@@ -55,13 +58,13 @@ namespace TheGame.Manager
             
             if (map != null)
             {
+                foreach (Entity entity in _entitiesToRemove)
+                    _entities.Remove(entity);
+
+                _entitiesToRemove.Clear();
+                
                 foreach (Entity entity in Entities)
-                {
-                    if (entity.Health > 0)
-                        entity.Update(gameTime, map);  
-                    else
-                        RemoveEntity(entity);
-                }   
+                    entity.Update(gameTime, map);
             }
         }
 

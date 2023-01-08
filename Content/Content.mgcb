@@ -25,6 +25,13 @@
 /processorParam:TextureFormat=Compressed
 /build:fonts/File.spritefont;fonts/font.spritefont
 
+#begin fonts/menu_font.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:fonts/menu_font.spritefont
+
 #begin maps/default/map_default.tmx
 /importer:TiledMapImporter
 /processor:TiledMapProcessor
@@ -42,12 +49,6 @@
 /processorParam:TextureFormat=Color
 /build:maps/default/tileset_default.png
 
-#begin sprites/blue_character/animations.sf
-/importer:SpriteFactoryContentImporter
-/processor:SpriteFactoryContentProcessor
-/processorParam:ContentType=MonoGame.Extended MonoGame.Extended.Animations.SpriteFactory.SpriteFactoryFileReader, MonoGame.Extended.Animations
-/build:sprites/blue_character/animations.sf
-
 #begin sprites/blue_character/texture.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -59,12 +60,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:sprites/blue_character/texture.png
-
-#begin sprites/goblin/animations.sf
-/importer:SpriteFactoryContentImporter
-/processor:SpriteFactoryContentProcessor
-/processorParam:ContentType=MonoGame.Extended MonoGame.Extended.Animations.SpriteFactory.SpriteFactoryFileReader, MonoGame.Extended.Animations
-/build:sprites/goblin/animations.sf
 
 #begin sprites/goblin/texture.png
 /importer:TextureImporter
@@ -78,12 +73,6 @@
 /processorParam:TextureFormat=Color
 /build:sprites/goblin/texture.png
 
-#begin sprites/squelette/animations.sf
-/importer:SpriteFactoryContentImporter
-/processor:SpriteFactoryContentProcessor
-/processorParam:ContentType=MonoGame.Extended MonoGame.Extended.Animations.SpriteFactory.SpriteFactoryFileReader, MonoGame.Extended.Animations
-/build:sprites/squelette/animations.sf
-
 #begin sprites/squelette/texture.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -95,4 +84,28 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:sprites/squelette/texture.png
+
+#begin ui/buttons/main_button.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ui/buttons/main_button.png
+
+#begin ui/main_background.jpg
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:ui/main_background.jpg
 

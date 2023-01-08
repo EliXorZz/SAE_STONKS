@@ -50,7 +50,7 @@
       "isLooping": false,
       "frameDuration": 0.2
     },
-    "mortD": {
+    "death": {
       "frames": [ 28, 30, 32, 34 ],
       "isLooping": false,
       "frameDuration": 0.2

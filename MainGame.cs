@@ -1,4 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
+using TheGame.Core;
 using TheGame.Manager;
 using TheGame.Screen;
 
@@ -68,7 +70,12 @@ public class MainGame : Game
         _graphics.PreferredBackBufferHeight = 720;
         _graphics.ApplyChanges();
         
-        _mapManager.SelectMap("default");
-        _screenStateManager.CurrentScreen = ScreenState.InGame;
+        MapManager.SelectMap("default");
+        ScreenStateManager.CurrentScreen = ScreenState.MainMenu;
+        
+        Goblin goblin = new Goblin(this);
+        MonsterManager.CreateMonster(goblin);
+            
+        PlayerManager.CreatePlayer(this, new PlayerControls(Keys.Left, Keys.Right, Keys.Up, Keys.Enter), "Joueur 1");
     }
 }

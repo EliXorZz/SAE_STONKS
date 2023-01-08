@@ -1,5 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
+
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Screens;
+using TheGame.Manager;
+using TheGame.Screen;
 
 namespace TheGame.UI.Components
 {
@@ -7,42 +11,34 @@ namespace TheGame.UI.Components
     {
         private SpriteFont _font;
 
-        private int _x, _y;
-        
-        private string _content;
+        private string _input;
 
         private Color _color;
 
-        public Text(Game game, string fontName, int x, int y, string content, Color color)
+        public Text(MainGame game, ScreenState state, string fontName, int x, int y, string input, Color color)
         {
-            _font = game.Content.Load<SpriteFont>($"fonts/{fontName}");
-
-            _x = x;
-            _y = y;
+            ScreenStateManager screenStateManager = game.ScreenStateManager;
+            GameScreen gameScreen = screenStateManager.GetScreen(state);
             
-            _content = content;
+            SpriteFont font = gameScreen.Content
+                .Load<SpriteFont>($"fonts/{fontName}");
+
+            _font = font;
+            
+            X = x;
+            Y = y;
+            
+            _input = input;
             
             _color = color;
         }
 
-        public int X
+        public string Input
         {
-            get => _x;
-            set => _x = value;
+            get => _input;
+            set => _input = value;
         }
 
-        public int Y
-        {
-            get => _y;
-            set => _y = value;
-        }
-
-        public string Content
-        {
-            get => _content;
-            set => _content = value;
-        }
-        
         public Color Color
         {
             get => _color;
@@ -51,12 +47,12 @@ namespace TheGame.UI.Components
 
         public Vector2 Size
         {
-            get => _font.MeasureString(_content);
+            get => _font.MeasureString(Input);
         }
-        
+
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.DrawString(_font, Content, new Vector2(X, Y), Color);
+            spriteBatch.DrawString(_font, Input, new Vector2(X, Y), Color);
         }
     }
 }

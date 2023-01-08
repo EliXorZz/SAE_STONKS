@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using TheGame.Screen;
 using TheGame.UI.Components;
 
 namespace TheGame.Core
@@ -19,6 +20,10 @@ namespace TheGame.Core
         private int _experience;
         private int _level;
 
+        private float _deadTime;
+        
+        private ProgressBar _healthBar;
+
         public Player(MainGame game, PlayerControls controls, int id, string pseudo, Vector2 position)
             : base(game, "blue_character", position, 0.05f, 100, 5, 2000)
         {
@@ -33,10 +38,20 @@ namespace TheGame.Core
 
             _experience = 0;
             _level = 0;
+
+            _deadTime = 0;
+            
+            int width = 300;
+            int height = 40;
+            int gap = 10;
+            
+            _healthBar = new ProgressBar(
+                _game, ScreenState.InGame, 20, 20 + Id * (height + gap), width, height, 1,
+                (float) Health / MaxHealth,
+                $"Player {Pseudo} | {Health}/{MaxHealth}",
+                Color.White, new Color(231, 76, 60), new Color(192, 57, 43)
+            );
         }
-        
-        public Player(MainGame game, PlayerControls controls, string pseudo)
-            : this(game, controls, -1, pseudo, Vector2.Zero) {}
 
         public PlayerControls Controls
         {
@@ -84,44 +99,75 @@ namespace TheGame.Core
         
         public override void Update(GameTime gameTime, Map map)
         {
-            if (Controls.IsLeft())
+            if (!IsDead)
             {
-                Velocity.X = -1;
-                Animation = "courseG";
-            }
-            else if (Controls.IsRight())
-            {
-                Velocity.X = 1;
-                Animation = "courseD";
+                if (Controls.IsAttack())
+                {
+                    foreach (Monster monster in _game.MonsterManager.Monsters)
+                    {
+                        Rectangle playerBounds = GetBounds();
+                        Rectangle monsterBounds = monster.GetBounds();
+
+                        if (monsterBounds.Intersects(playerBounds))
+                            Attack(monster);
+                    }
+                }
+            
+                if (Controls.IsLeft())
+                {
+                    Velocity.X = -1;
+                    if (Controls.IsAttack())
+                        Animation = "combat1G";
+                    else
+                        Animation = "courseG";
+                }
+                else if (Controls.IsRight())
+                {
+                    Velocity.X = 1;
+                    if (Controls.IsAttack())
+                        Animation = "combat1D";
+                    else
+                        Animation = "courseD";
+                    
+                }
+                else
+                {
+                    Velocity.X = 0;
+                    if (Controls.IsAttack())
+                        Animation = "combat1D";
+                    else
+                        Animation = "idle";
+                }
+
+                if (Controls.IsJump() && IsCollisionMap(map, 0, 1))
+                    Velocity.Y = -3;
             }
             else
             {
-                Velocity.X = 0;
-                Animation = "idle";
-            }
+                float elapsed = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
 
-            if (Controls.IsJump() && IsCollisionMap(map, 1))
-                Velocity.Y = -3;
+                if (_deadTime < 800)
+                {
+                    _deadTime += elapsed;
+                    Animation = "death";
+                    
+                    Sprite.Alpha = _deadTime / 800;
+                }
+                else
+                {
+                    _game.PlayerManager.RemovePlayer(this);
+                }
+            }
+            
+            _healthBar.Progress = (float) Health / MaxHealth;
+            _healthBar.UpdateText($"Player {Pseudo} | {Health}/{MaxHealth}");
 
             base.Update(gameTime, map);
         }
 
         public override void Draw(SpriteBatch spriteBatch, SpriteBatch globalUIBatch)
         {
-            int width = 300;
-            int height = 40;
-
-            int gap = 10;
-            
-            ProgressBar progressBar =
-                new ProgressBar(_game, 20, 20 + Id * (height + gap), width, height, 1,
-                    (float) Health / MaxHealth,
-                    $"Player {Id} - {Pseudo} - {Health}/{MaxHealth}",
-                    Color.White, new Color(231, 76, 60), new Color(192, 57, 43)
-                );
-
-            progressBar.Draw(globalUIBatch);   
-            
+            _healthBar.Draw(globalUIBatch);
             base.Draw(spriteBatch, globalUIBatch);
         }
     }
