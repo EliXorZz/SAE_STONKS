@@ -2,7 +2,7 @@
   "textureAtlas": {
     "texture": "Sqeuleteu.png",
     "regionWidth": 150,
-    "regionHeight": 150
+    "regionHeight": 57
   },
   "cycles": {
     "idle": {
