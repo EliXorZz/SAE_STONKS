@@ -123,10 +123,9 @@ namespace TheGame.Core
                     {
                         _attack = false;
                         Attend = DateTime.Now.AddMilliseconds(3000);
-                        
 
                         if (monsterBounds.Intersects(targetBounds))
-                            Attack(target);
+                            Attack(gameTime, target);
                     }
                     if(_healthSave > Health && !Ragdoll && !IsAttack)
                     {
@@ -202,12 +201,15 @@ namespace TheGame.Core
             base.Draw(spriteBatch, globalUIBatch);
 
         }
-        public void Attack(Player player)
+        public void Attack(GameTime gameTime, Player player)
         {
+            float total = (float) gameTime.TotalGameTime.TotalMilliseconds;
+
             Random _random = new Random();
             int realDamage = _random.Next(1, Damage);
 
             player.Health -= realDamage;
+            player.LastAttack = total;
 
             player.AddFadeInterfaceComponent(
                 200,

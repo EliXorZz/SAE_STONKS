@@ -18,14 +18,17 @@ namespace TheGame.Core
         private bool _swordMode;
         private int _swordDamage;
 
-        private int _experience;
-        private int _level;
-
         private float _deadTime;
+
         private float _attackDelay;
+        private float _lastAttack;
+
+        private float _regenTime;
 
         private int _sens;
         private ProgressBar _healthBar;
+
+        private float cooldownTransformation;
 
         public Player(MainGame game, PlayerControls controls, int id, string pseudo, Vector2 position, Color color)
             : base(game, "blue_character", position, 0.10f, 100, 25, 2000, color)
@@ -34,26 +37,27 @@ namespace TheGame.Core
             _controls = controls;
 
             _sens = 1;
-             
+
             _id = id;
             _pseudo = pseudo;
 
             _swordMode = false;
             _swordDamage = 10;
 
-            _experience = 0;
-            _level = 0;
-
             _deadTime = 0;
+
             _attackDelay = 0;
-            
+            _lastAttack = 0;
+
+            _regenTime = 0;
+
             int width = 300;
             int height = 40;
             int gap = 10;
-            
+
             _healthBar = new ProgressBar(
                 _game, ScreenState.InGame, 20, 20 + Id * (height + gap), width, height, 1,
-                (float) Health / MaxHealth,
+                (float)Health / MaxHealth,
                 $"Player {Pseudo} | {Health}/{MaxHealth}",
                 Color.White, new Color(231, 76, 60), new Color(192, 57, 43)
             );
@@ -63,12 +67,12 @@ namespace TheGame.Core
         {
             get => _controls;
         }
-        
+
         public int Id
         {
             get => _id;
             set => _id = value;
-        } 
+        }
 
         public string Pseudo
         {
@@ -86,28 +90,50 @@ namespace TheGame.Core
             get => _swordDamage;
             set
             {
-                if (value < 0) 
+                if (value < 0)
                     throw new ArgumentOutOfRangeException(nameof(value), "Sword damage must be positive or null");
-                
+
                 _swordDamage = value;
             }
         }
 
-        public int Experience
+        public float LastAttack
         {
-            get => _experience;     
+            get => _lastAttack;
+            set => _lastAttack = value;
+        }
+        public float CooldownTransformation 
+        { get => cooldownTransformation; 
+          set => cooldownTransformation = value; 
         }
 
-        public int Level
-        {
-            get => _level;   
-        }
-        
         public override void Update(GameTime gameTime, Map map)
         {
             if (!IsDead)
             {
-                if (Controls.IsAttack())
+                float total = (float)gameTime.TotalGameTime.TotalMilliseconds;
+                float elapsed = (float)gameTime.ElapsedGameTime.Milliseconds;
+
+                if (Controls.IsTransform() && !SwordMode && cooldownTransformation >= 500)
+                {
+                    SwordMode = true;
+                    cooldownTransformation = 0;
+
+                }
+                else if (Controls.IsTransform() && SwordMode && cooldownTransformation >=500  )
+                {
+                    SwordMode = false;
+                    cooldownTransformation = 0;
+
+
+                }
+                
+                    cooldownTransformation += elapsed;
+                
+
+
+
+                if (Controls.IsAttack() && !SwordMode)
                 {
                     foreach (Monster monster in _game.MonsterManager.Monsters)
                     {
@@ -118,8 +144,9 @@ namespace TheGame.Core
                             Attack(monster, gameTime);
                     }
                 }
-            
-                if (Controls.IsLeft())
+
+
+                if (Controls.IsLeft() && !SwordMode)
                 {
                     _sens = -1;
                     Velocity.X = -1;
@@ -131,9 +158,9 @@ namespace TheGame.Core
                     }
                     else
                         Animation = "courseG";
-                        
+
                 }
-                else if (Controls.IsRight())
+                else if (Controls.IsRight() && !SwordMode)
                 {
                     _sens = 1;
                     Velocity.X = 1;
@@ -145,9 +172,9 @@ namespace TheGame.Core
                     }
                         
                     else
-                        Animation = "courseD";             
+                        Animation = "courseD";
                 }
-                else
+                else if (!SwordMode)
                 {
                     Velocity.X = 0;
 
@@ -156,7 +183,7 @@ namespace TheGame.Core
                         
                         Animation = "combatD";
                     }
-                    else if(Controls.IsAttack() && _sens == -1)
+                    else if (Controls.IsAttack() && _sens == -1)
                     {
                         
                         Animation = "combatG";
@@ -165,15 +192,26 @@ namespace TheGame.Core
                         Animation = "idle";
                 }
 
-                if (Controls.IsJump() && IsCollisionMap(map, 0, 1))
+                if (Controls.IsJump() && IsCollisionMap(map, 0, 1) && !SwordMode)
                     Velocity.Y = -3;
 
-                _healthBar.Progress = (float) Health / MaxHealth;
+                if (_lastAttack + 6000 < total &&!SwordMode)
+                {
+                    _regenTime += elapsed;
+
+                    if (_regenTime >= 1500)
+                    {
+                        Health = Math.Min(MaxHealth, Health + 5);
+                        _regenTime = 0;
+                    }
+                }
+
+                _healthBar.Progress = (float)Health / MaxHealth;
                 _healthBar.Input = $"Player {Pseudo} | {Health}/{MaxHealth}";
 
                 _healthBar.Update();
             }
-            else
+            else if(!SwordMode)
             {
                 float elapsed = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
 
@@ -181,7 +219,7 @@ namespace TheGame.Core
                 {
                     _deadTime += elapsed;
                     Animation = "death";
-                    
+
                     Sprite.Alpha = _deadTime / 800;
                 }
                 else
@@ -201,7 +239,7 @@ namespace TheGame.Core
 
         public void Attack(Monster entity, GameTime gameTime)
         {
-            float elapsed = (float) gameTime.ElapsedGameTime.TotalMilliseconds;
+            float elapsed = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
             _attackDelay += elapsed;
 
             if (_attackDelay >= 1800)
@@ -220,5 +258,6 @@ namespace TheGame.Core
                     new Text(_game, ScreenState.InGame, "font", 0, 0, $"-{realDamage}", Color.Red));
             }
         }
+
     }
 }
