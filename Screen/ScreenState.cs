@@ -2,6 +2,6 @@
 {
     public enum ScreenState
     {
-        InGame, MainMenu, PauseMenu, DidactMenu
+        InGame, MainMenu, PauseMenu, DidactMenu, GameOver
     }
 }
