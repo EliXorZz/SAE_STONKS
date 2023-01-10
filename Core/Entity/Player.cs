@@ -223,5 +223,6 @@ namespace TheGame.Core
                     new Text(_game, ScreenState.InGame, "font", 0, 0, $"-{realDamage}", Color.Red));
             }
         }
+        
     }
 }
