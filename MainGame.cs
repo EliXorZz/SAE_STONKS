@@ -76,6 +76,6 @@ public class MainGame : Game
         Goblin goblin = new Goblin(this);
         MonsterManager.CreateMonster(goblin);
             
-        PlayerManager.CreatePlayer(this, new PlayerControls(Keys.Left, Keys.Right, Keys.Up, Keys.Enter), "Joueur 1");
+        PlayerManager.CreatePlayer(this, new PlayerControls(Keys.Left, Keys.Right, Keys.Up, Keys.Down), "Joueur 1");
     }
 }
