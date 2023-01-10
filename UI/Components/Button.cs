@@ -21,6 +21,8 @@ namespace TheGame.UI.Components
         
         private Text _text;
 
+        private float _delay;
+
         public Button(MainGame game, ScreenState state, string button, string input, int x, int y, Action action)
         {
             ScreenStateManager screenStateManager = game.ScreenStateManager;
@@ -46,6 +48,8 @@ namespace TheGame.UI.Components
             
             _text.X = (int) (X + Width / 2 - _text.Size.X / 2);
             _text.Y = (int) (Y + Height / 2 - _text.Size.Y / 2);
+
+            _delay = 0;
         }
 
         public int Width
@@ -73,6 +77,9 @@ namespace TheGame.UI.Components
         {
             bool hovered = IsHovered();
 
+            float elapsed = (float) gameTime.ElapsedGameTime.TotalMilliseconds;
+            _delay += elapsed;
+
             if (hovered)
             {
                 _sprite.Play("true");
@@ -84,8 +91,11 @@ namespace TheGame.UI.Components
                 _text.Y = (int) (Y + Height / 2 - _text.Size.Y / 2) - 5;
             }
 
-            if (hovered && Mouse.GetState().LeftButton == ButtonState.Pressed)
+            if (hovered && _delay >= 1000 && Mouse.GetState().LeftButton == ButtonState.Pressed)
+            {
                 _action();
+                _delay = 0;
+            }
             
             _sprite.Update(gameTime);
         }

@@ -35,7 +35,12 @@ namespace TheGame.Manager
             _players.Remove(player);
             _entityManager.RemoveEntity(player);
         }
-        
+        public void ClearPlayers()
+        {
+            Players.Clear();
+            _entityManager.Entities.Clear();
+        }
+
         public List<Player> GetNearbyPlayers(Entity source, float distance)
         {
             List<Player> list = new List<Player>();

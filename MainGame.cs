@@ -79,12 +79,6 @@ public class MainGame : Game
         _graphics.PreferredBackBufferHeight = 720;
         _graphics.ApplyChanges();
         
-        MapManager.SelectMap("default");
-        ScreenStateManager.CurrentScreen = ScreenState.MainMenu;
-        
-        Goblin goblin = new Goblin(this);
-        MonsterManager.CreateMonster(goblin);
-            
-        PlayerManager.CreatePlayer(this, new PlayerControls(Keys.Left, Keys.Right, Keys.Up, Keys.Down), "Joueur 1");
+        ScreenStateManager.CurrentScreen = ScreenState.MainMenu;  
     }
 }
