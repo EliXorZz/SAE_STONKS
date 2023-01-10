@@ -1,6 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended.Screens;
+using TheGame.Core;
 using TheGame.UI.Components;
 
 namespace TheGame.Screen
@@ -31,7 +33,18 @@ namespace TheGame.Screen
             Button playButton = new Button(
                 _game, ScreenState.MainMenu, "main_button", "Start",
                 width / 2, 200,
-                () => _game.ScreenStateManager.CurrentScreen = ScreenState.InGame
+                () =>
+                {
+                    _game.MapManager.SelectMap("default");
+
+                    _game.MonsterManager.ClearMonsters();
+                    _game.PlayerManager.ClearPlayers();
+
+                    _game.PlayerManager.CreatePlayer(_game, new PlayerControls(Keys.Left, Keys.Right, Keys.Up, Keys.Down), "Joueur 1", Color.Cyan);
+                    _game.PlayerManager.CreatePlayer(_game, new PlayerControls(Keys.Q, Keys.D, Keys.Z, Keys.S), "Joueur 2", Color.DeepPink);
+
+                    _game.ScreenStateManager.CurrentScreen = ScreenState.InGame;
+                }
             );
             
             Button exitButton = new Button(
@@ -41,7 +54,7 @@ namespace TheGame.Screen
             );
 
             Button didact = new Button(
-                _game, ScreenState.MainMenu, "little_button", "?", width / 2 + 450, 200, () =>
+                _game, ScreenState.MainMenu, "little_button", "?", width / 2 + 450, 450, () =>
                 {
                     _game.ScreenStateManager.CurrentScreen = ScreenState.DidactMenu;
                 });

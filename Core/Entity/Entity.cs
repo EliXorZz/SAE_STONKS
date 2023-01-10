@@ -33,9 +33,10 @@ namespace TheGame.Core
 
         private int _damage;
         private float _damageCooldown;
+        private Color _color;
 
         public Entity(MainGame game, string spriteName, Vector2 position,
-            float gravity, int health, int damage, float damageCooldown)
+            float gravity, int health, int damage, float damageCooldown, Color color)
         {
             _game = game;
             _random = new Random();
@@ -63,6 +64,14 @@ namespace TheGame.Core
 
             _damage = damage;
             _damageCooldown = damageCooldown;
+
+            _color = color;
+        }
+
+        public Color Color
+        {
+            get => _color;
+            set => _color = value;
         }
 
         public AnimatedSprite Sprite
@@ -206,6 +215,7 @@ namespace TheGame.Core
 
         public virtual void Draw(SpriteBatch mainSpriteBatch, SpriteBatch uiSpriteBatch)
         {
+            Sprite.Color = Color;
             mainSpriteBatch.Draw(Sprite, Position);
 
             foreach (FadeInterfaceComponent component in _interfaceComponents)

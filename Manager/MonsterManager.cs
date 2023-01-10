@@ -33,6 +33,12 @@ namespace TheGame.Manager
             _entityManager.RemoveEntity(monster);
         }
 
+        public void ClearMonsters()
+        {
+            Monsters.Clear();
+            _entityManager.Entities.Clear();
+        }
+
         public List<Monster> GetNearbyMonsters(Entity source, float distance)
         {
             List<Monster> list = new List<Monster>();
