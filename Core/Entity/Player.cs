@@ -23,7 +23,8 @@ namespace TheGame.Core
 
         private float _deadTime;
         private float _attackDelay;
-        
+
+        private int _sens;
         private ProgressBar _healthBar;
 
         public Player(MainGame game, PlayerControls controls, int id, string pseudo, Vector2 position)
@@ -32,6 +33,8 @@ namespace TheGame.Core
             _game = game;
             _controls = controls;
 
+            _sens = 1;
+             
             _id = id;
             _pseudo = pseudo;
 
@@ -118,15 +121,18 @@ namespace TheGame.Core
             
                 if (Controls.IsLeft())
                 {
+                    _sens = -1;
                     Velocity.X = -1;
 
                     if (Controls.IsAttack())
                         Animation = "combatG";
                     else
                         Animation = "courseG";
+                        
                 }
                 else if (Controls.IsRight())
                 {
+                    _sens = 1;
                     Velocity.X = 1;
 
                     if (Controls.IsAttack())
@@ -138,8 +144,14 @@ namespace TheGame.Core
                 {
                     Velocity.X = 0;
 
-                    if (Controls.IsAttack())
+                    if (Controls.IsAttack() && _sens == 1)
+                    {
                         Animation = "combatD";
+                    }
+                    else if(Controls.IsAttack() && _sens == -1)
+                    {
+                        Animation = "combatG";
+                    }
                     else
                         Animation = "idle";
                 }
