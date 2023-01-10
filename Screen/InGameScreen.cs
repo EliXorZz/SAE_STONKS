@@ -39,6 +39,9 @@ namespace TheGame.Screen
 
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
                 _game.ScreenStateManager.CurrentScreen = ScreenState.PauseMenu;
+
+            if (_game.PlayerManager.Players.Count == 0)
+                _game.ScreenStateManager.CurrentScreen = ScreenState.GameOver;
         }
 
         public override void Draw(GameTime gameTime)
