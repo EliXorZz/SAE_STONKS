@@ -1,6 +1,6 @@
 {
   "textureAtlas": {
-    "texture": "Sqeuleteu.png",
+    "texture": "texture.png",
     "regionWidth": 150,
     "regionHeight": 57
   },
