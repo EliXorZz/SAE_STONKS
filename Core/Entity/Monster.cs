@@ -12,7 +12,7 @@ namespace TheGame.Core
         private MainGame _game;
         private float _speed;
 
-        bool _attack;
+        private bool _attack;
         private float _deadTime;
         private int _healthSave;
         private DateTime _attackDelay;

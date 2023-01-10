@@ -28,7 +28,7 @@ namespace TheGame.Core
         private ProgressBar _healthBar;
 
         public Player(MainGame game, PlayerControls controls, int id, string pseudo, Vector2 position)
-            : base(game, "blue_character", position, 0.05f, 100, 25, 2000)
+            : base(game, "blue_character", position, 0.10f, 100, 25, 2000)
         {
             _game = game;
             _controls = controls;

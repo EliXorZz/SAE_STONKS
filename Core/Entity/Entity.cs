@@ -172,21 +172,21 @@ namespace TheGame.Core
             float elapsed = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
             
 
-            Position += Velocity;
+            Position += Velocity *2 ;
 
             if (IsCollisionMap(map))
             {
-                Position.X -= Velocity.X;
+                Position.X -= Velocity.X *2;
                 Velocity.X = 0;
             }
 
             if (IsCollisionMap(map) && Velocity.X == 0)
             {
-                Position -= Velocity;
+                Position -= Velocity *2;
                 Velocity.Y = 0;
             }
             else
-                Velocity.Y += Gravity;
+                Velocity.Y += Gravity ;
 
             List<FadeInterfaceComponent> removeComponents = new List<FadeInterfaceComponent>();
             foreach (FadeInterfaceComponent component in _interfaceComponents)
