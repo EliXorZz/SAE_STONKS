@@ -20,6 +20,8 @@ public class MainGame : Game
 
     private WaveManager _waveManager;
 
+    private SoundManager _soundManager;
+
     public MainGame()
     {
         _graphics = new GraphicsDeviceManager(this);
@@ -58,6 +60,11 @@ public class MainGame : Game
         get => _waveManager;
     }
 
+    public SoundManager SoundManager
+    {
+        get => _soundManager;
+    }
+
     protected override void Initialize()
     {
         _screenStateManager = new ScreenStateManager(this);
@@ -70,11 +77,14 @@ public class MainGame : Game
 
         _waveManager = new WaveManager(this);
 
+        _soundManager = new SoundManager();
+
         base.Initialize();
     }
 
     protected override void LoadContent()
     {
+        SoundManager.Initial(this);
         _graphics.PreferredBackBufferWidth = 1280;
         _graphics.PreferredBackBufferHeight = 720;
         _graphics.ApplyChanges();

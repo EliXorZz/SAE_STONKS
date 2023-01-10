@@ -152,7 +152,10 @@ namespace TheGame.Core
                     Velocity.X = -1;
 
                     if (Controls.IsAttack())
+                    {
                         Animation = "combatG";
+                        
+                    }
                     else
                         Animation = "courseG";
 
@@ -163,7 +166,11 @@ namespace TheGame.Core
                     Velocity.X = 1;
 
                     if (Controls.IsAttack())
+                    {
                         Animation = "combatD";
+                        
+                    }
+                        
                     else
                         Animation = "courseD";
                 }
@@ -173,10 +180,12 @@ namespace TheGame.Core
 
                     if (Controls.IsAttack() && _sens == 1)
                     {
+                        
                         Animation = "combatD";
                     }
                     else if (Controls.IsAttack() && _sens == -1)
                     {
+                        
                         Animation = "combatG";
                     }
                     else
