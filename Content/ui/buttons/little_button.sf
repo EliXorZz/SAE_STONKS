@@ -1,6 +1,6 @@
 {
   "textureAtlas": {
-    "texture": "PBoutonAsset.png",
+    "texture": "little_button.png",
     "regionWidth": 200,
     "regionHeight": 200
   },

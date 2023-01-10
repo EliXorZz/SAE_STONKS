@@ -95,7 +95,7 @@ namespace TheGame.Core
                             Animation = "run_right";
                         }
                     }
-                    else if (!Ragdle && !Attack1)
+                    else if (!IsAttack)
                     {
                         Velocity.X = 0;
                         Animation = "idle";
