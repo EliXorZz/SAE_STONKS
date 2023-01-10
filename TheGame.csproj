@@ -13,11 +13,14 @@
     <ItemGroup>
         <None Remove="Icon.ico" />
         <None Remove="Icon.bmp" />
-        <None Update="Content\sprites\blue_character\animations.sf">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        <None Update="Content\sprites\blue_character\adventurer-Sheet.png">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="Content\sprites\blue_character\animations.sh">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
         <None Update="Content\sprites\blue_character\texture.png">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+          <CopyToOutputDirectory>Never</CopyToOutputDirectory>
         </None>
         <None Update="Content\sprites\goblin\animations.sf">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -36,6 +39,9 @@
         </None>
         <None Update="Content\ui\buttons\main_button.png">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Content\ui\buttons\little_button.sf">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
     </ItemGroup>
     <ItemGroup>

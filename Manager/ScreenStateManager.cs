@@ -26,6 +26,7 @@ public class ScreenStateManager
         _gameScreens.Add(ScreenState.PauseMenu, new PauseMenuScreen(game));
         _gameScreens.Add(ScreenState.MainMenu, new MainMenuScreen(game));
         _gameScreens.Add(ScreenState.InGame, new InGameScreen(game));
+        _gameScreens.Add(ScreenState.DidactMenu, new DidactScreen(game));
     }
 
     public ScreenState CurrentScreen

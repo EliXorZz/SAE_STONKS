@@ -95,7 +95,7 @@ namespace TheGame.Core
                             Animation = "run_right";
                         }
                     }
-                    else
+                    else if (!Ragdle && !Attack1)
                     {
                         Velocity.X = 0;
                         Animation = "idle";
@@ -119,6 +119,7 @@ namespace TheGame.Core
                         if (monsterBounds.Intersects(targetBounds))
                             Attack(target);
                     }
+
 
                 }
                 else
@@ -188,5 +189,6 @@ namespace TheGame.Core
                 new Vector2(0, -3),
                 new Text(_game, ScreenState.InGame, "font", 0, 0, $"-{realDamage}", Color.Red));
         }
+
     }
 }

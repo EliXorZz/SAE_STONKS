@@ -39,8 +39,13 @@ namespace TheGame.Screen
                 width / 2, 450,
                 () => _game.Exit()
             );
-            
-            _buttons = new Button[]{ playButton, exitButton };
+
+            Button didact = new Button(
+                _game, ScreenState.MainMenu, "little_button", "?", width / 2 + 450, 200, () =>
+                {
+                    _game.ScreenStateManager.CurrentScreen = ScreenState.DidactMenu;
+                });
+            _buttons = new Button[]{ playButton, exitButton, didact};
             _background = _game.Content.Load<Texture2D>("ui/main_background");
         }
         
