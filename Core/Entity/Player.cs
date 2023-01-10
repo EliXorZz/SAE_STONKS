@@ -160,13 +160,22 @@ namespace TheGame.Core
                 if (Controls.IsJump() && IsCollisionMap(map, 0, 1))
                     Velocity.Y = -3;
 
-                if (_lastAttack + 6000 < total)
+                if (Health < MaxHealth && _lastAttack + 6000 < total)
                 {
                     _regenTime += elapsed;
 
                     if (_regenTime >= 1500)
                     {
-                        Health = Math.Min(MaxHealth, Health + 5);
+                        int newHealth = 5;
+
+                        Health = Math.Min(MaxHealth, Health + newHealth);
+
+                        AddFadeInterfaceComponent(
+                        200,
+                        1500,
+                        new Vector2(0, -3),
+                        new Text(_game, ScreenState.InGame, "font", 0, 0, $"+{newHealth}", Color.Green));
+
                         _regenTime = 0;
                     }
                 }
