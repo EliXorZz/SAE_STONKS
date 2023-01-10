@@ -14,7 +14,10 @@ namespace TheGame.Core
         bool _attack;
         private float _deadTime;
         private DateTime _tempsAnimation;
-        private int _sens; 
+        private int _sens;
+        private bool _ragdle;
+        private DateTime _ragdleCoolDown;
+        private int _healthCurrent;
 
         public Monster(MainGame game, string spriteName, Vector2 position, float speed, int health, int damage, int damageCooldown)
             : base(game, spriteName, position, 0.15f, health, damage, damageCooldown)
@@ -23,6 +26,7 @@ namespace TheGame.Core
             _speed = speed;
             _attack = false;
             _deadTime = 0;
+            this.HealthCurrent = health;
         }
 
         public Monster(MainGame game, string spriteName, float speed, int health, int damage, int damageCooldown)
@@ -73,6 +77,10 @@ namespace TheGame.Core
             }
         }
 
+        public bool Ragdle { get => _ragdle; set => _ragdle = value; }
+        public DateTime RagdleCoolDown { get => _ragdleCoolDown; set => _ragdleCoolDown = value; }
+        public int HealthCurrent { get => _healthCurrent; set => _healthCurrent = value; }
+
         public override void Update(GameTime gameTime, Map map)
         {
             if (!IsDead)
@@ -91,13 +99,20 @@ namespace TheGame.Core
 
                 if (target != null)
                 {
+
                     Rectangle monsterBounds = GetBounds();
                     Rectangle targetBounds = target.GetBounds();
 
                     Vector2 targetCenter = target.GetCenter();
                     Vector2 center = GetCenter();
+                    if(HealthCurrent > Health)
+                    {
+                        HealthCurrent = Health;
+                        RagdleCoolDown = DateTime.Now.AddMilliseconds(1400);
+                        Ragdle = true
+                    }
 
-                    if ((int)center.X != (int)targetCenter.X && !Attack1)
+                    if ((int)center.X != (int)targetCenter.X && !Attack1 && !Ragdle)
                     {
                         if (targetCenter.X < center.X)
                         {
@@ -112,7 +127,7 @@ namespace TheGame.Core
                             Sens = 1;
                         }
                     }
-                    else
+                    else if (!Ragdle && !Attack1)
                     {
                         Velocity.X = 0;
                         Animation = "idle";
@@ -120,18 +135,17 @@ namespace TheGame.Core
 
                     if (monsterBounds.Intersects(targetBounds))
                     {
-                        if (!this.Attack1)
+                         
+                        if (!this.Attack1 && !Ragdle)
                         {
                             this.Attack1 = true;
-                            this.TempsAnimation = DateTime.Now.AddMilliseconds(1400);
+                            this.TempsAnimation = DateTime.Now.AddMilliseconds(1000);
 
                             
 
                         }
-                        if (Sens == 1 && Attack1)
-                            Animation = "attack_right";
-                        else if(Attack1 && Sens == -1)
-                            Animation = "attack_left";
+                        
+                        
 
                     }
                     if (Sens == 1 && Attack1)
@@ -146,8 +160,19 @@ namespace TheGame.Core
                             Attack(target);
                         }
                     }
+                    if (Ragdle)
+                    {
+                        Animation = "take_hit";
+                    }
+                    if(DateTime.Now >= this.RagdleCoolDown && Ragdle)
+                    {
+                        Ragdle = false;
+
+                    }
+
 
                 }
+                
 
                 if (IsCollisionMap(map, 0, 1))
                     if (IsCollisionMap(map, -1, 0) || IsCollisionMap(map, 1, 0))
@@ -218,5 +243,6 @@ namespace TheGame.Core
 
 
         }
+
     }
 }
