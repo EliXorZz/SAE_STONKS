@@ -109,7 +109,7 @@ namespace TheGame.Core
                     {
                         HealthCurrent = Health;
                         RagdleCoolDown = DateTime.Now.AddMilliseconds(1400);
-                        Ragdle = true
+                        Ragdle = true;
                     }
 
                     if ((int)center.X != (int)targetCenter.X && !Attack1 && !Ragdle)
@@ -163,6 +163,7 @@ namespace TheGame.Core
                     if (Ragdle)
                     {
                         Animation = "take_hit";
+
                     }
                     if(DateTime.Now >= this.RagdleCoolDown && Ragdle)
                     {
