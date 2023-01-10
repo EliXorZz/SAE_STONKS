@@ -41,7 +41,7 @@ namespace TheGame.Screen
             );
 
             Button didact = new Button(
-                _game, ScreenState.MainMenu, "little_button", "?", width / 2 + 450, 200, () =>
+                _game, ScreenState.MainMenu, "little_button", "?", width / 2 + 450, 450, () =>
                 {
                     _game.ScreenStateManager.CurrentScreen = ScreenState.DidactMenu;
                 });

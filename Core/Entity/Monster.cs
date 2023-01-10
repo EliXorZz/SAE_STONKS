@@ -23,7 +23,7 @@ namespace TheGame.Core
         private DateTime _attend;
 
         public Monster(MainGame game, string spriteName, Vector2 position, float speed, int health, int damage, int damageCooldown)
-            : base(game, spriteName, position, 0.15f, health, damage, damageCooldown)
+            : base(game, spriteName, position, 0.15f, health, damage, damageCooldown, Color.White)
         {
             _game = game;
             _speed = speed;

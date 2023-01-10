@@ -20,9 +20,9 @@ namespace TheGame.Manager
             get => _players;
         }
 
-        public void CreatePlayer(MainGame game, PlayerControls controls, string pseudo)
+        public void CreatePlayer(MainGame game, PlayerControls controls, string pseudo, Color color)
         {
-            Player player = new Player(game, controls, GetNextId(), pseudo, Vector2.Zero);
+            Player player = new Player(game, controls, GetNextId(), pseudo, Vector2.Zero, color);
 
             _entityManager.RandomPosition(player);
             
