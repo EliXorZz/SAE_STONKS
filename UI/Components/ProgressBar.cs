@@ -11,6 +11,8 @@ namespace TheGame.UI.Components
         private int _width, _height;
         private int _outline;
 
+        private string _input;
+
         private RectangleShape _outlineShape;
         private RectangleShape _backgroundShape;
         private RectangleShape _progressShape;
@@ -29,6 +31,8 @@ namespace TheGame.UI.Components
             _height = height;
             _outline = outline;
 
+            _input = input;
+
             _outlineShape = 
                 new RectangleShape(game, X, Y, width, height, outlineColor);
 
@@ -39,6 +43,12 @@ namespace TheGame.UI.Components
                 new RectangleShape(game, X + outline, Y + outline, (int) ((width - outline * 2) * Progress), height - outline * 2, fillColor);
 
             _text = new Text(game, state, "font", 0, 0, input, Color.White);
+        }
+
+        public string Input
+        {
+            get => _input;
+            set => _input = value;
         }
 
         public float Progress
@@ -60,6 +70,7 @@ namespace TheGame.UI.Components
 
             _text.X = (int)(X + _width / 2 - _text.Size.X / 2);
             _text.Y = (int)(Y + _height / 2 - _text.Size.Y / 2);
+            _text.Input = Input;
 
             _progressShape.Width = (int)((_width - _outline * 2) * Progress);
         }
@@ -69,6 +80,7 @@ namespace TheGame.UI.Components
             _outlineShape.Draw(spriteBatch);
             _backgroundShape.Draw(spriteBatch);
             _progressShape.Draw(spriteBatch);
+
             _text.Draw(spriteBatch);
         }
     }

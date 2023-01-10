@@ -22,11 +22,12 @@ namespace TheGame.Core
         private int _level;
 
         private float _deadTime;
+        private float _attackDelay;
         
         private ProgressBar _healthBar;
 
         public Player(MainGame game, PlayerControls controls, int id, string pseudo, Vector2 position)
-            : base(game, "blue_character", position, 0.05f, 100, 5, 2000)
+            : base(game, "blue_character", position, 0.05f, 100, 25, 2000)
         {
             _game = game;
             _controls = controls;
@@ -41,6 +42,7 @@ namespace TheGame.Core
             _level = 0;
 
             _deadTime = 0;
+            _attackDelay = 0;
             
             int width = 300;
             int height = 40;
@@ -110,13 +112,14 @@ namespace TheGame.Core
                         Rectangle monsterBounds = monster.GetBounds();
 
                         if (monsterBounds.Intersects(playerBounds))
-                            Attack(monster);
+                            Attack(monster, gameTime);
                     }
                 }
             
                 if (Controls.IsLeft())
                 {
                     Velocity.X = -1;
+
                     if (Controls.IsAttack())
                         Animation = "combat1G";
                     else
@@ -125,15 +128,16 @@ namespace TheGame.Core
                 else if (Controls.IsRight())
                 {
                     Velocity.X = 1;
+
                     if (Controls.IsAttack())
                         Animation = "combat1D";
                     else
-                        Animation = "courseD";
-                    
+                        Animation = "courseD";             
                 }
                 else
                 {
                     Velocity.X = 0;
+
                     if (Controls.IsAttack())
                         Animation = "combat1D";
                     else
@@ -144,6 +148,8 @@ namespace TheGame.Core
                     Velocity.Y = -3;
 
                 _healthBar.Progress = (float) Health / MaxHealth;
+                _healthBar.Input = $"Player {Pseudo} | {Health}/{MaxHealth}";
+
                 _healthBar.Update();
             }
             else
@@ -171,24 +177,27 @@ namespace TheGame.Core
             _healthBar.Draw(globalUIBatch);
             base.Draw(spriteBatch, globalUIBatch);
         }
-        public void Attack(Monster entity)
+
+        public void Attack(Monster entity, GameTime gameTime)
         {
+            float elapsed = (float) gameTime.ElapsedGameTime.TotalMilliseconds;
+            _attackDelay += elapsed;
 
-            Random _random = new Random();
-            int realDamage = _random.Next(1, Damage);
+            if (_attackDelay >= 1800)
+            {
+                _attackDelay = 0;
 
-            entity.Health -= realDamage;
+                Random _random = new Random();
+                int realDamage = _random.Next(1, Damage);
 
+                entity.Health -= realDamage;
 
-
-            entity.AddFadeInterfaceComponent(
-                200,
-                1500,
-                new Vector2(0, -3),
-                new Text(_game, ScreenState.InGame, "font", 0, 0, $"-{realDamage}", Color.Red));
-
-
-
+                entity.AddFadeInterfaceComponent(
+                    200,
+                    1500,
+                    new Vector2(0, -3),
+                    new Text(_game, ScreenState.InGame, "font", 0, 0, $"-{realDamage}", Color.Red));
+            }
         }
     }
 }

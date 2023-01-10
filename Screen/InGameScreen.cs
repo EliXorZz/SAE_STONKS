@@ -35,6 +35,7 @@ namespace TheGame.Screen
         {
             _game.MapManager.Update(gameTime);
             _game.EntityManager.Update(gameTime);
+            _game.WaveManager.Update();
 
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
                 _game.ScreenStateManager.CurrentScreen = ScreenState.PauseMenu;

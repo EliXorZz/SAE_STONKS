@@ -11,10 +11,11 @@ namespace TheGame.Core
     {
         private MainGame _game;
         private float _speed;
+
         bool _attack;
         private float _deadTime;
-        private DateTime _tempsAnimation;
-        private int _sens; 
+
+        private DateTime _attackDelay;
 
         private ProgressBar _healthBar;
         private ProgressBar _cooldownBar;
@@ -24,22 +25,23 @@ namespace TheGame.Core
         {
             _game = game;
             _speed = speed;
+
             _attack = false;
             _deadTime = 0;
 
-            Rectangle bounds = GetBounds();
+            _attackDelay = DateTime.Now;
 
             _healthBar =
-                new ProgressBar(_game, ScreenState.InGame, 0, 0 - 8, bounds.Width,
-                    8, 1, (float)Health / MaxHealth, String.Empty,
-                    Color.Transparent, Color.Transparent, new Color(46, 204, 113)
+                new ProgressBar(_game, ScreenState.InGame, 0, 0 - 8, 50,
+                    8, 1, (float) Health / MaxHealth, String.Empty,
+                    Color.Transparent, Color.Transparent, Color.DarkRed
                 );
 
-            _cooldownBar =
-                new ProgressBar(_game, ScreenState.InGame, 0, 0, bounds.Width,
-                    4, 1, -(CurrentDamageCooldown / DamageCooldown) + 1, String.Empty,
-                    Color.Transparent, Color.Transparent, new Color(241, 196, 15)
-                );
+            //_cooldownBar =
+            //    new ProgressBar(_game, ScreenState.InGame, 0, 0, 20,
+            //        4, 1, 1 - (float) (DateTime.Now.Millisecond / TempsAnimation.Millisecond), String.Empty,
+            //        Color.Transparent, Color.Transparent, new Color(241, 196, 15)
+            //    );
         }
 
         public Monster(MainGame game, string spriteName, float speed, int health, int damage, int damageCooldown)
@@ -51,43 +53,9 @@ namespace TheGame.Core
             set => _speed = value;
         }
 
-        public bool Attack1
+        public bool IsAttack
         {
-            get
-            {
-                return _attack;
-            }
-
-            set
-            {
-                _attack = value;
-            }
-        }
-
-        public DateTime TempsAnimation
-        {
-            get
-            {
-                return _tempsAnimation;
-            }
-
-            set
-            {
-                _tempsAnimation = value;
-            }
-        }
-
-        public int Sens
-        {
-            get
-            {
-                return _sens;
-            }
-
-            set
-            {
-                _sens = value;
-            }
+            get => _attack;
         }
 
         public override void Update(GameTime gameTime, Map map)
@@ -106,26 +74,25 @@ namespace TheGame.Core
                     }
                 }
 
+                Rectangle monsterBounds = GetBounds();
+                Vector2 monsterCenter = GetCenter();
+
                 if (target != null)
                 {
                     Rectangle targetBounds = target.GetBounds();
-
                     Vector2 targetCenter = target.GetCenter();
-                    Vector2 center = GetCenter();
 
-                    if ((int)center.X != (int)targetCenter.X && !Attack1)
+                    if ((int) monsterCenter.X != (int)targetCenter.X && !IsAttack)
                     {
-                        if (targetCenter.X < center.X)
+                        if (targetCenter.X < monsterCenter.X)
                         {
                             Velocity.X = -Speed;
                             Animation = "run_left";
-                            Sens = -1;
                         }
-                        else if (targetCenter.X > center.X)
+                        else if (targetCenter.X > monsterCenter.X)
                         {
                             Velocity.X = Speed;
                             Animation = "run_right";
-                            Sens = 1;
                         }
                     }
                     else
@@ -134,33 +101,23 @@ namespace TheGame.Core
                         Animation = "idle";
                     }
 
-                    if (monsterBounds.Intersects(targetBounds))
+                    if (!IsAttack && monsterBounds.Intersects(targetBounds))
                     {
-                        if (!this.Attack1)
-                        {
-                            this.Attack1 = true;
-                            this.TempsAnimation = DateTime.Now.AddMilliseconds(1400);
-
-                            
-
-                        }
-                        if (Sens == 1 && Attack1)
-                            Animation = "attack_right";
-                        else if(Attack1 && Sens == -1)
-                            Animation = "attack_left";
-
+                        _attack = true;
+                        _attackDelay = DateTime.Now.AddMilliseconds(1800);
                     }
-                    if (Sens == 1 && Attack1)
-                        Animation = "attack_right";
-                    else if (Attack1 && Sens == -1)
+
+                    if (IsAttack && targetCenter.X < monsterCenter.X)
                         Animation = "attack_left";
-                    if (DateTime.Now >= this.TempsAnimation && Attack1)
+                    else if (IsAttack && targetCenter.X > monsterCenter.X)
+                        Animation = "attack_right";
+
+                    if (IsAttack && DateTime.Now >= _attackDelay)
                     {
-                        this.Attack1 = false;
+                        _attack = false;
+
                         if (monsterBounds.Intersects(targetBounds))
-                        {
                             Attack(target);
-                        }
                     }
 
                 }
@@ -170,22 +127,22 @@ namespace TheGame.Core
                     Animation = "idle";
                 }
 
-                if (IsCollisionMap(map, 1, 0))
+                if (IsCollisionMap(map, 0, 1))
                     if (IsCollisionMap(map, -1, 0) || IsCollisionMap(map, 1, 0))
                         Velocity.Y = -3.5f;
 
                 int barOffsetY = -4;
 
-                _healthBar.X = monsterBounds.X;
+                _healthBar.X = (int) monsterCenter.X - 50 / 2;
                 _healthBar.Y = monsterBounds.Y - barOffsetY - 8;
                 _healthBar.Progress = (float) Health / MaxHealth;
 
-                _cooldownBar.X = monsterBounds.X;
-                _cooldownBar.Y = monsterBounds.Y - barOffsetY;
-                _cooldownBar.Progress = 1 - (float) CurrentDamageCooldown / DamageCooldown;
+                //_cooldownBar.X = monsterBounds.X;
+                //_cooldownBar.Y = monsterBounds.Y - barOffsetY;
+                //_cooldownBar.Progress = 1 - (float) (DateTime.Now.Millisecond / TempsAnimation.Millisecond);
 
                 _healthBar.Update();
-                _cooldownBar.Update();
+                //_cooldownBar.Update();
             }
             else
             {
@@ -211,46 +168,25 @@ namespace TheGame.Core
         {
             if (!IsDead)
             {
-                Rectangle bounds = GetBounds();
-                int barOffsetY = -4;
-
-                ProgressBar healthBar =
-                    new ProgressBar(_game, ScreenState.InGame, bounds.X, bounds.Y - barOffsetY - 8, bounds.Width,
-                        8, 1, (float)Health / MaxHealth, String.Empty,
-                        Color.Transparent, Color.Transparent, new Color(46, 204, 113)
-                    );
-
-                /*ProgressBar cooldownBar =
-                    new ProgressBar(_game, ScreenState.InGame, bounds.X, bounds.Y - barOffsetY, bounds.Width,
-                        4, 1, -(CurrentDamageCooldown / DamageCooldown) + 1, String.Empty,
-                        Color.Transparent, Color.Transparent, new Color(241, 196, 15)
-                    );*/
-
-                healthBar.Draw(spriteBatch);
-                //cooldownBar.Draw(spriteBatch);
+                _healthBar.Draw(spriteBatch);
+                //_cooldownBar.Draw(spriteBatch);
             }
 
             base.Draw(spriteBatch, globalUIBatch);
 
         }
-        public void Attack(Player entity)
+        public void Attack(Player player)
         {
-
             Random _random = new Random();
             int realDamage = _random.Next(1, Damage);
 
-            entity.Health -= realDamage;
+            player.Health -= realDamage;
 
-
-
-            entity.AddFadeInterfaceComponent(
+            player.AddFadeInterfaceComponent(
                 200,
                 1500,
                 new Vector2(0, -3),
                 new Text(_game, ScreenState.InGame, "font", 0, 0, $"-{realDamage}", Color.Red));
-
-
-
         }
     }
 }

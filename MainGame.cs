@@ -18,6 +18,8 @@ public class MainGame : Game
     private MonsterManager _monsterManager;
     private PlayerManager _playerManager;
 
+    private WaveManager _waveManager;
+
     public MainGame()
     {
         _graphics = new GraphicsDeviceManager(this);
@@ -51,6 +53,11 @@ public class MainGame : Game
         get => _playerManager;
     }
 
+    public WaveManager WaveManager
+    {
+        get => _waveManager;
+    }
+
     protected override void Initialize()
     {
         _screenStateManager = new ScreenStateManager(this);
@@ -60,6 +67,8 @@ public class MainGame : Game
         _entityManager = new EntityManager(_mapManager);
         _monsterManager = new MonsterManager(_entityManager);
         _playerManager = new PlayerManager(_entityManager);
+
+        _waveManager = new WaveManager(this);
 
         base.Initialize();
     }
@@ -72,15 +81,6 @@ public class MainGame : Game
         
         MapManager.SelectMap("default");
         ScreenStateManager.CurrentScreen = ScreenState.MainMenu;
-
-        for (int i = 0; i < 5; i++)
-        {
-            Goblin goblin = new Goblin(this);
-            MonsterManager.CreateMonster(goblin);
-
-            Squeleton squeleton = new Squeleton(this);
-            MonsterManager.CreateMonster(squeleton);
-        }
 
         PlayerManager.CreatePlayer(this, new PlayerControls(Keys.Left, Keys.Right, Keys.Up, Keys.Enter), "Joueur 1");
     }

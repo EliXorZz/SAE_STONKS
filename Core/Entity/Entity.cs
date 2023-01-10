@@ -33,7 +33,6 @@ namespace TheGame.Core
 
         private int _damage;
         private float _damageCooldown;
-        private DateTime _currentDamageCooldown;
 
         public Entity(MainGame game, string spriteName, Vector2 position,
             float gravity, int health, int damage, float damageCooldown)
@@ -64,8 +63,6 @@ namespace TheGame.Core
 
             _damage = damage;
             _damageCooldown = damageCooldown;
-
-
         }
 
         public AnimatedSprite Sprite
@@ -123,8 +120,6 @@ namespace TheGame.Core
             set => _damageCooldown = value;
         }
 
-        
-
         public void AddFadeInterfaceComponent(float delay, float time, Vector2 offset, InterfaceComponent component)
         {
             _interfaceComponents.Add(
@@ -171,8 +166,6 @@ namespace TheGame.Core
 
             return false;
         }
-
-        
 
         public virtual void Update(GameTime gameTime, Map map)
         {
