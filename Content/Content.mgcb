@@ -69,6 +69,18 @@
 /processorParam:TextureFormat=Color
 /build:maps/default/tileset_default.png
 
+#begin sprites/blue_character/adventurer-Sheet.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:sprites/blue_character/adventurer-Sheet.png
+
 #begin sprites/blue_character/texture.png
 /importer:TextureImporter
 /processor:TextureProcessor
