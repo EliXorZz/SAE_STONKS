@@ -84,6 +84,12 @@
 /processorParam:TextureFormat=Color
 /build:maps/default/tileset_default.png
 
+#begin sound/sword.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sound/sword.wav
+
 #begin sprites/blue_character/texture.png
 /importer:TextureImporter
 /processor:TextureProcessor
