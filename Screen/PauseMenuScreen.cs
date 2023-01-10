@@ -29,9 +29,9 @@ namespace TheGame.Screen
             int width = GraphicsDevice.Viewport.Width;
 
             Button exitButton = new Button(
-                _game, ScreenState.MainMenu, "main_button", "Exit",
+                _game, ScreenState.MainMenu, "main_button", "Menu",
                 width / 2, 240,
-                () => _game.Exit()
+                () => _game.ScreenStateManager.CurrentScreen = ScreenState.MainMenu
             );
             
             _buttons = new Button[]{ exitButton };
