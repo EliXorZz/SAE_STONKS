@@ -60,7 +60,7 @@ namespace TheGame.Manager
             if (_game.MonsterManager.Monsters.Count == 0)
             {
                 int waveType = _random.Next(1, 3 + 1);
-                int number = _random.Next(1, 3);
+                int number = _random.Next(1, 6);
 
                 SpawnMonstersWave(waveType, number);
 

@@ -1,8 +1,9 @@
-﻿namespace TheGame.Core
+﻿using System;
+
+namespace TheGame.Core
 {
     public class Squeleton : Monster
     {
-        public Squeleton(MainGame game)
-            : base(game, "squelette", 0.5f, 50, 25, 3500) {}
+        public Squeleton(MainGame game) : base(game, "squelette", (float) new Random().Next(2, 6) / 10, 50, 25, 3500) {}
     }
 }
