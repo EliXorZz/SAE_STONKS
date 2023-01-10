@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using TheGame.Screen;
@@ -141,6 +142,9 @@ namespace TheGame.Core
 
                 if (Controls.IsJump() && IsCollisionMap(map, 0, 1))
                     Velocity.Y = -3;
+
+                _healthBar.Progress = (float) Health / MaxHealth;
+                _healthBar.Update();
             }
             else
             {
@@ -158,9 +162,6 @@ namespace TheGame.Core
                     _game.PlayerManager.RemovePlayer(this);
                 }
             }
-            
-            _healthBar.Progress = (float) Health / MaxHealth;
-            _healthBar.UpdateText($"Player {Pseudo} | {Health}/{MaxHealth}");
 
             base.Update(gameTime, map);
         }

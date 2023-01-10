@@ -72,10 +72,16 @@ public class MainGame : Game
         
         MapManager.SelectMap("default");
         ScreenStateManager.CurrentScreen = ScreenState.MainMenu;
-        
-        Goblin goblin = new Goblin(this);
-        MonsterManager.CreateMonster(goblin);
-            
+
+        for (int i = 0; i < 5; i++)
+        {
+            Goblin goblin = new Goblin(this);
+            MonsterManager.CreateMonster(goblin);
+
+            Squeleton squeleton = new Squeleton(this);
+            MonsterManager.CreateMonster(squeleton);
+        }
+
         PlayerManager.CreatePlayer(this, new PlayerControls(Keys.Left, Keys.Right, Keys.Up, Keys.Enter), "Joueur 1");
     }
 }

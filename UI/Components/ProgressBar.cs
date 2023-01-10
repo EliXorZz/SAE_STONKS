@@ -5,59 +5,40 @@ using TheGame.Screen;
 namespace TheGame.UI.Components
 {
     public class ProgressBar : InterfaceComponent
-    {
-        private MainGame _game;
-        private ScreenState _state;
-        
-        private int _width, _height;
-
-        private int _outline;
-
+    {      
         private float _progress;
 
-        private Color _outlineColor;
-        private Color _backgroundColor;
-        private Color _fillColor;
-        
+        private int _width, _height;
+        private int _outline;
+
+        private RectangleShape _outlineShape;
+        private RectangleShape _backgroundShape;
+        private RectangleShape _progressShape;
+
         private Text _text;
 
         public ProgressBar(MainGame game, ScreenState state, int x, int y, int width, int height, int outline, float progress, string input,
             Color outlineColor, Color backgroundColor, Color fillColor)
         {
-            _game = game;
-            _state = state;
-
-            _width = width;
-            _height = height;
-            
             X = x;
             Y = y;
-
-            _outline = outline;
             
             _progress = progress;
 
-            _outlineColor = outlineColor;
-            _backgroundColor = backgroundColor;
-            _fillColor = fillColor;
-            
-            UpdateText(input);
-        }
+            _width = width;
+            _height = height;
+            _outline = outline;
 
-        public int Width
-        {
-            get => _width;
-        }
+            _outlineShape = 
+                new RectangleShape(game, X, Y, width, height, outlineColor);
 
-        public int Height
-        {
-            get => _height;   
-        }
+            _backgroundShape =
+                new RectangleShape(game, X + outline, Y + outline, width - outline * 2, height - outline * 2, backgroundColor);
 
-        public int Outline
-        {
-            get => _outline;
-            set => _outline = value;
+            _progressShape =
+                new RectangleShape(game, X + outline, Y + outline, (int) ((width - outline * 2) * Progress), height - outline * 2, fillColor);
+
+            _text = new Text(game, state, "font", 0, 0, input, Color.White);
         }
 
         public float Progress
@@ -66,46 +47,28 @@ namespace TheGame.UI.Components
             set => _progress = value;
         }
 
-        public Color OutlineColor
+        public void Update()
         {
-            get => _outlineColor;
-            set => _outlineColor = value;
-        }
+            _outlineShape.X = X;
+            _outlineShape.Y = Y;
 
-        public Color BackgroundColor
-        {
-            get => _backgroundColor;
-            set => _backgroundColor = value;
-        }
+            _backgroundShape.X = X + _outline;
+            _backgroundShape.Y = Y + _outline;
 
-        public Color FillColor
-        {
-            get => _fillColor;
-            set => _fillColor = value;
-        }
+            _progressShape.X = X + _outline;
+            _progressShape.Y = Y + _outline;
 
-        public void UpdateText(string input)
-        {
-            _text = new Text(_game, _state, "font", 0, 0, input, Color.White);
+            _text.X = (int)(X + _width / 2 - _text.Size.X / 2);
+            _text.Y = (int)(Y + _height / 2 - _text.Size.Y / 2);
+
+            _progressShape.Width = (int)((_width - _outline * 2) * Progress);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
-        {
-            RectangleShape outline = new RectangleShape(_game, X , Y, Width, Height, OutlineColor);
-            
-            RectangleShape background = 
-                new RectangleShape(_game, X + Outline , Y + Outline, Width - Outline * 2, Height - Outline * 2, BackgroundColor);
-            
-            RectangleShape progress = 
-                new RectangleShape(_game, X + Outline , Y + Outline, (int) ((Width - Outline * 2) * Progress), Height - Outline * 2, FillColor);
-
-            _text.X = (int) (X + Width / 2 - _text.Size.X / 2);
-            _text.Y = (int) (Y + Height / 2 - _text.Size.Y / 2);
-            
-            outline.Draw(spriteBatch);
-            background.Draw(spriteBatch);
-            progress.Draw(spriteBatch);
-            
+        {   
+            _outlineShape.Draw(spriteBatch);
+            _backgroundShape.Draw(spriteBatch);
+            _progressShape.Draw(spriteBatch);
             _text.Draw(spriteBatch);
         }
     }

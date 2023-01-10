@@ -187,7 +187,7 @@ namespace TheGame.Core
                 entity.AddFadeInterfaceComponent(
                     200,
                     1500,
-                    new Vector2(0, -3), 
+                    new Vector2(0, -3),
                     new Text(_game, ScreenState.InGame, "font", 0, 0, $"-{realDamage}", Color.Red));
             }
 
@@ -219,14 +219,14 @@ namespace TheGame.Core
             foreach (FadeInterfaceComponent component in _interfaceComponents)
             {
                 bool finish = component.Update(gameTime);
-                
+
                 if (finish)
                     removeComponents.Add(component);
             }
-            
+
             foreach (FadeInterfaceComponent component in removeComponents)
                 _interfaceComponents.Remove(component);
-            
+
             Sprite.Play(Animation);
             Sprite.Update(gameTime);
         }
