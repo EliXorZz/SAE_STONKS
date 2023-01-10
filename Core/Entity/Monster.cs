@@ -110,6 +110,7 @@ namespace TheGame.Core
                     {
                         _attack = true;
                         _attackDelay = DateTime.Now.AddMilliseconds(1800);
+                        _healthSave = Health;
                         
                     }
 
@@ -132,6 +133,7 @@ namespace TheGame.Core
                         Ragdoll = true;
                         _healthSave = Health;
                         _ragdollCoolDown = DateTime.Now.AddMilliseconds(1800);
+
 
                     }
                     if(DateTime.Now >= _ragdollCoolDown && Ragdoll)
