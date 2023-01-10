@@ -14,22 +14,25 @@ namespace TheGame.Core
 
         bool _attack;
         private float _deadTime;
-
+        private int _healthSave;
         private DateTime _attackDelay;
-
+        private bool _ragdoll;
+        private DateTime _ragdollCoolDown;
         private ProgressBar _healthBar;
         private ProgressBar _cooldownBar;
+        private DateTime _attend;
 
         public Monster(MainGame game, string spriteName, Vector2 position, float speed, int health, int damage, int damageCooldown)
             : base(game, spriteName, position, 0.15f, health, damage, damageCooldown)
         {
             _game = game;
             _speed = speed;
-
+            Ragdoll = false;
             _attack = false;
             _deadTime = 0;
-
+            _healthSave = health;
             _attackDelay = DateTime.Now;
+            Attend = DateTime.Now;
 
             _healthBar =
                 new ProgressBar(_game, ScreenState.InGame, 0, 0 - 8, 50,
@@ -57,6 +60,8 @@ namespace TheGame.Core
         {
             get => _attack;
         }
+        public bool Ragdoll { get => _ragdoll; set => _ragdoll = value; }
+        public DateTime Attend { get => _attend; set => _attend = value; }
 
         public override void Update(GameTime gameTime, Map map)
         {
@@ -95,16 +100,17 @@ namespace TheGame.Core
                             Animation = "run_right";
                         }
                     }
-                    else if (!IsAttack)
+                    else if (!IsAttack && !Ragdoll)
                     {
                         Velocity.X = 0;
                         Animation = "idle";
                     }
 
-                    if (!IsAttack && monsterBounds.Intersects(targetBounds))
+                    if (!IsAttack && monsterBounds.Intersects(targetBounds) && !Ragdoll && DateTime.Now >= Attend)
                     {
                         _attack = true;
                         _attackDelay = DateTime.Now.AddMilliseconds(1800);
+                        
                     }
 
                     if (IsAttack && targetCenter.X < monsterCenter.X)
@@ -115,11 +121,29 @@ namespace TheGame.Core
                     if (IsAttack && DateTime.Now >= _attackDelay)
                     {
                         _attack = false;
+                        Attend = DateTime.Now.AddMilliseconds(3000);
+                        
 
                         if (monsterBounds.Intersects(targetBounds))
                             Attack(target);
                     }
+                    if(_healthSave > Health && !Ragdoll && !IsAttack)
+                    {
+                        Ragdoll = true;
+                        _healthSave = Health;
+                        _ragdollCoolDown = DateTime.Now.AddMilliseconds(1800);
 
+                    }
+                    if(DateTime.Now >= _ragdollCoolDown && Ragdoll)
+                    {
+                        Ragdoll = false;
+
+                    }
+                    if (Ragdoll)
+                    {
+                        Animation = "take_hit";
+
+                    }
 
                 }
                 else

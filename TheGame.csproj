@@ -16,11 +16,14 @@
         <None Update="Content\sprites\blue_character\adventurer-Sheet.png">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
+        <None Update="Content\sprites\blue_character\animations.sf">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
         <None Update="Content\sprites\blue_character\animations.sh">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
         <None Update="Content\sprites\blue_character\texture.png">
-          <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
         <None Update="Content\sprites\goblin\animations.sf">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
