@@ -87,7 +87,7 @@ namespace TheGame.Core
                     Rectangle targetBounds = target.GetBounds();
                     Vector2 targetCenter = target.GetCenter();
 
-                    if ((int) monsterCenter.X != (int)targetCenter.X && !IsAttack)
+                    if ((int) monsterCenter.X != (int)targetCenter.X && !IsAttack && !Ragdoll)
                     {
                         if (targetCenter.X < monsterCenter.X)
                         {
