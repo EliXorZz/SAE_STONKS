@@ -18,11 +18,12 @@ namespace TheGame.Core
         private bool _swordMode;
         private int _swordDamage;
 
-        private int _experience;
-        private int _level;
-
         private float _deadTime;
+
         private float _attackDelay;
+        private float _lastAttack;
+
+        private float _regenTime;
 
         private int _sens;
         private ProgressBar _healthBar;
@@ -41,11 +42,12 @@ namespace TheGame.Core
             _swordMode = false;
             _swordDamage = 10;
 
-            _experience = 0;
-            _level = 0;
-
             _deadTime = 0;
+
             _attackDelay = 0;
+            _lastAttack = 0;
+
+            _regenTime = 0;
             
             int width = 300;
             int height = 40;
@@ -86,27 +88,26 @@ namespace TheGame.Core
             get => _swordDamage;
             set
             {
-                if (value < 0) 
+                if (value < 0)
                     throw new ArgumentOutOfRangeException(nameof(value), "Sword damage must be positive or null");
-                
+
                 _swordDamage = value;
             }
         }
 
-        public int Experience
+        public float LastAttack
         {
-            get => _experience;     
+            get => _lastAttack;
+            set => _lastAttack = value;
         }
 
-        public int Level
-        {
-            get => _level;   
-        }
-        
         public override void Update(GameTime gameTime, Map map)
         {
             if (!IsDead)
             {
+                float total = (float) gameTime.TotalGameTime.TotalMilliseconds;
+                float elapsed = (float) gameTime.ElapsedGameTime.Milliseconds;
+
                 if (Controls.IsAttack())
                 {
                     foreach (Monster monster in _game.MonsterManager.Monsters)
@@ -158,6 +159,17 @@ namespace TheGame.Core
 
                 if (Controls.IsJump() && IsCollisionMap(map, 0, 1))
                     Velocity.Y = -3;
+
+                if (_lastAttack + 6000 < total)
+                {
+                    _regenTime += elapsed;
+
+                    if (_regenTime >= 1500)
+                    {
+                        Health = Math.Min(MaxHealth, Health + 5);
+                        _regenTime = 0;
+                    }
+                }
 
                 _healthBar.Progress = (float) Health / MaxHealth;
                 _healthBar.Input = $"Player {Pseudo} | {Health}/{MaxHealth}";
