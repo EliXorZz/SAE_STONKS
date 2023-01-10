@@ -40,7 +40,7 @@ namespace TheGame.Screen
                     _game.MonsterManager.ClearMonsters();
                     _game.PlayerManager.ClearPlayers();
 
-                    _game.PlayerManager.CreatePlayer(_game, new PlayerControls(Keys.Left, Keys.Right, Keys.Up, Keys.Down, Keys.Enter), "Joueur 1", Color.Cyan);
+                    _game.PlayerManager.CreatePlayer(_game, new PlayerControls(Keys.Left, Keys.Right, Keys.Up, Keys.Down, Keys.Enter), "Joueur 1", Color.DarkCyan);
                     _game.PlayerManager.CreatePlayer(_game, new PlayerControls(Keys.Q, Keys.D, Keys.Z, Keys.S,Keys.E), "Joueur 2", Color.DeepPink);
 
                     _game.ScreenStateManager.CurrentScreen = ScreenState.InGame;

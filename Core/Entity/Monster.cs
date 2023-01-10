@@ -215,7 +215,7 @@ namespace TheGame.Core
                 200,
                 1500,
                 new Vector2(0, -3),
-                new Text(_game, ScreenState.InGame, "font", 0, 0, $"-{realDamage}", Color.Red));
+                new Text(_game, ScreenState.InGame, "font_small", 0, 0, $"-{realDamage}", Color.Red));
         }
 
     }

@@ -53,12 +53,19 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin fonts/File.spritefont
+#begin fonts/font.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
-/build:fonts/File.spritefont;fonts/font.spritefont
+/build:fonts/font.spritefont
+
+#begin fonts/font_small.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:fonts/font_small.spritefont
 
 #begin fonts/menu_font.spritefont
 /importer:FontDescriptionImporter
@@ -101,18 +108,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:sprites/blue_character/texture.png
-
-#begin sprites/blue_character/texture_transformation.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:sprites/blue_character/texture_transformation.png
 
 #begin sprites/goblin/texture.png
 /importer:TextureImporter
