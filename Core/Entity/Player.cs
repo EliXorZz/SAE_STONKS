@@ -171,5 +171,24 @@ namespace TheGame.Core
             _healthBar.Draw(globalUIBatch);
             base.Draw(spriteBatch, globalUIBatch);
         }
+        public void Attack(Monster entity)
+        {
+
+            Random _random = new Random();
+            int realDamage = _random.Next(1, Damage);
+
+            entity.Health -= realDamage;
+
+
+
+            entity.AddFadeInterfaceComponent(
+                200,
+                1500,
+                new Vector2(0, -3),
+                new Text(_game, ScreenState.InGame, "font", 0, 0, $"-{realDamage}", Color.Red));
+
+
+
+        }
     }
 }

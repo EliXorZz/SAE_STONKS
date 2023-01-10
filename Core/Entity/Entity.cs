@@ -16,13 +16,13 @@ namespace TheGame.Core
     {
         private MainGame _game;
         private Random _random;
-        
+
         private AnimatedSprite _sprite;
 
         private string _animation;
-        
+
         private List<FadeInterfaceComponent> _interfaceComponents;
-        
+
         private Vector2 _velocity;
 
         private Vector2 _position;
@@ -33,27 +33,27 @@ namespace TheGame.Core
 
         private int _damage;
         private float _damageCooldown;
-        private float _currentDamageCooldown;
+        private DateTime _currentDamageCooldown;
 
         public Entity(MainGame game, string spriteName, Vector2 position,
             float gravity, int health, int damage, float damageCooldown)
         {
             _game = game;
             _random = new Random();
-            
+
             ScreenStateManager screenStateManager = game.ScreenStateManager;
             GameScreen inGameScreen = screenStateManager.GetScreen(ScreenState.InGame);
-            
+
             SpriteSheet spriteSheet = inGameScreen.Content
                 .Load<SpriteSheet>($"sprites/{spriteName}/animations.sf", new JsonContentLoader());
-            
+
             _sprite = new AnimatedSprite(spriteSheet);
             _sprite.Origin = Vector2.Zero;
-            
+
             _animation = "idle";
 
             _interfaceComponents = new List<FadeInterfaceComponent>();
-            
+
             _velocity = Vector2.Zero;
 
             _position = position;
@@ -64,8 +64,8 @@ namespace TheGame.Core
 
             _damage = damage;
             _damageCooldown = damageCooldown;
-            
-            _currentDamageCooldown = 0;
+
+
         }
 
         public AnimatedSprite Sprite
@@ -105,7 +105,7 @@ namespace TheGame.Core
         {
             get => _maxHealth;
         }
-        
+
         public bool IsDead
         {
             get => _health <= 0;
@@ -116,18 +116,15 @@ namespace TheGame.Core
             get => _damage;
             set => _damage = value;
         }
-        
+
         public float DamageCooldown
         {
             get => _damageCooldown;
             set => _damageCooldown = value;
         }
+
         
-        public float CurrentDamageCooldown
-        {
-            get => _currentDamageCooldown;
-        }
-        
+
         public void AddFadeInterfaceComponent(float delay, float time, Vector2 offset, InterfaceComponent component)
         {
             _interfaceComponents.Add(
@@ -137,20 +134,20 @@ namespace TheGame.Core
 
         public Rectangle GetBounds()
         {
-            return new Rectangle((int) Position.X, (int) Position.Y, 
+            return new Rectangle((int)Position.X, (int)Position.Y,
                 Sprite.TextureRegion.Width, Sprite.TextureRegion.Height);
         }
 
         public Vector2 GetCenter()
         {
             Rectangle bounds = GetBounds();
-            
+
             return new Vector2(
-                Position.X + (float) bounds.Width / 2,
-                Position.Y + (float) bounds.Height / 2
+                Position.X + (float)bounds.Width / 2,
+                Position.Y + (float)bounds.Height / 2
             );
         }
-        
+
         public float GetDistanceBetweenEntity(Entity entity)
         {
             return Vector2.Distance(GetCenter(), entity.GetCenter());
@@ -164,9 +161,9 @@ namespace TheGame.Core
             {
                 for (int y = 0; y < bounds.Height; y++)
                 {
-                    ushort tX = (ushort) ((bounds.X + x + offsetX) / map.TiledMap.TileWidth);
-                    ushort tY = (ushort) ((bounds.Y + y + offsetY) / map.TiledMap.TileHeight);
-                    
+                    ushort tX = (ushort)((bounds.X + x + offsetX) / map.TiledMap.TileWidth);
+                    ushort tY = (ushort)((bounds.Y + y + offsetY) / map.TiledMap.TileHeight);
+
                     if (map.GetTile(MapLayer.GROUND, tX, tY).HasValue)
                         return true;
                 }
@@ -175,42 +172,25 @@ namespace TheGame.Core
             return false;
         }
 
-        public bool Attack(Entity entity)
-        {
-            if (CurrentDamageCooldown <= 0)
-            {
-                int realDamage = _random.Next(1, Damage);
-                
-                entity.Health -= realDamage;
-                _currentDamageCooldown = DamageCooldown;
-
-                entity.AddFadeInterfaceComponent(
-                    200,
-                    1500,
-                    new Vector2(0, -3),
-                    new Text(_game, ScreenState.InGame, "font", 0, 0, $"-{realDamage}", Color.Red));
-            }
-
-            return CurrentDamageCooldown >= DamageCooldown - 1800;
-        }
         
+
         public virtual void Update(GameTime gameTime, Map map)
         {
-            float elapsed = (float) gameTime.ElapsedGameTime.TotalMilliseconds;
-            _currentDamageCooldown = Math.Max(0, _currentDamageCooldown - elapsed);
+            float elapsed = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+            
 
             Position += Velocity;
-            
+
             if (IsCollisionMap(map))
             {
                 Position.X -= Velocity.X;
                 Velocity.X = 0;
             }
-            
+
             if (IsCollisionMap(map) && Velocity.X == 0)
             {
                 Position -= Velocity;
-                Velocity.Y = 0;   
+                Velocity.Y = 0;
             }
             else
                 Velocity.Y += Gravity;
@@ -234,7 +214,7 @@ namespace TheGame.Core
         public virtual void Draw(SpriteBatch mainSpriteBatch, SpriteBatch uiSpriteBatch)
         {
             mainSpriteBatch.Draw(Sprite, Position);
-            
+
             foreach (FadeInterfaceComponent component in _interfaceComponents)
                 component.Draw(mainSpriteBatch);
         }
