@@ -91,7 +91,7 @@ namespace TheGame.Core
                     Rectangle targetBounds = target.GetBounds();
                     Vector2 targetCenter = target.GetCenter();
 
-                    if (distance > monsterBounds.Width / 2)
+                    if (!IsAttack && distance > monsterBounds.Width / 2)
                     {
                         if (targetCenter.X < monsterCenter.X)
                         {
