@@ -28,7 +28,7 @@ namespace TheGame.Core
         private int _sens;
         private ProgressBar _healthBar;
 
-        private float cooldownTransformation;
+        private float _cooldownTransformation;
 
         public Player(MainGame game, PlayerControls controls, int id, string pseudo, Vector2 position, Color color)
             : base(game, "blue_character", position, 0.10f, 100, 15, 2000, color)
@@ -102,9 +102,10 @@ namespace TheGame.Core
             get => _lastAttack;
             set => _lastAttack = value;
         }
+
         public float CooldownTransformation 
-        { get => cooldownTransformation; 
-          set => cooldownTransformation = value; 
+        { 
+          get => _cooldownTransformation; 
         }
 
         public override void Update(GameTime gameTime, Map map)
@@ -114,21 +115,21 @@ namespace TheGame.Core
                 float total = (float)gameTime.TotalGameTime.TotalMilliseconds;
                 float elapsed = (float)gameTime.ElapsedGameTime.Milliseconds;
 
-                if (Controls.IsTransform() && !SwordMode && cooldownTransformation >= 500)
+                if (Controls.IsTransform() && !SwordMode && _cooldownTransformation >= 500)
                 {
                     SwordMode = true;
-                    cooldownTransformation = 0;
+                    _cooldownTransformation = 0;
 
                 }
-                else if (Controls.IsTransform() && SwordMode && cooldownTransformation >=500  )
+                else if (Controls.IsTransform() && SwordMode && _cooldownTransformation >= 500  )
                 {
                     SwordMode = false;
-                    cooldownTransformation = 0;
+                    _cooldownTransformation = 0;
 
 
                 }
-                
-                cooldownTransformation += elapsed;
+
+                _cooldownTransformation += elapsed;
 
                 if (Controls.IsAttack() && !SwordMode)
                 {
@@ -142,17 +143,13 @@ namespace TheGame.Core
                     }
                 }
 
-
                 if (Controls.IsLeft() && !SwordMode)
                 {
                     _sens = -1;
                     Velocity.X = -1;
 
                     if (Controls.IsAttack())
-                    {
                         Animation = "combatG";
-                        
-                    }
                     else
                         Animation = "courseG";
 
@@ -163,11 +160,7 @@ namespace TheGame.Core
                     Velocity.X = 1;
 
                     if (Controls.IsAttack())
-                    {
                         Animation = "combatD";
-                        
-                    }
-                        
                     else
                         Animation = "courseD";
                 }
@@ -176,15 +169,10 @@ namespace TheGame.Core
                     Velocity.X = 0;
 
                     if (Controls.IsAttack() && _sens == 1)
-                    {
                         
                         Animation = "combatD";
-                    }
                     else if (Controls.IsAttack() && _sens == -1)
-                    {
-                        
                         Animation = "combatG";
-                    }
                     else
                         Animation = "idle";
                 }
@@ -193,8 +181,7 @@ namespace TheGame.Core
                     Velocity.Y = -3;
 
                 if (Health < MaxHealth && _lastAttack + 6000 < total)
-                if (_lastAttack + 6000 < total &&!SwordMode)
-                {
+                    {
                     _regenTime += elapsed;
 
                     if (_regenTime >= 1500)
