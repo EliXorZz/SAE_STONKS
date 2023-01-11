@@ -18,7 +18,7 @@ namespace TheGame.Core
         private Random _random;
 
         private AnimatedSprite _sprite;
-
+        private AnimatedSprite _spriteSauv;
         private string _animation;
 
         private List<FadeInterfaceComponent> _interfaceComponents;
@@ -35,6 +35,8 @@ namespace TheGame.Core
         private float _damageCooldown;
         private Color _color;
 
+        private SpriteSheet _sauvgardeSprite;
+
         public Entity(MainGame game, string spriteName, Vector2 position,
             float gravity, int health, int damage, float damageCooldown, Color color)
         {
@@ -48,7 +50,9 @@ namespace TheGame.Core
                 .Load<SpriteSheet>($"sprites/{spriteName}/animations.sf", new JsonContentLoader());
 
             _sprite = new AnimatedSprite(spriteSheet);
+            _spriteSauv = new AnimatedSprite(spriteSheet);
             _sprite.Origin = Vector2.Zero;
+            _spriteSauv.Origin = Vector2.Zero;
 
             _animation = "idle";
 
@@ -129,6 +133,19 @@ namespace TheGame.Core
         {
             get => _damageCooldown;
             set => _damageCooldown = value;
+        }
+
+        public AnimatedSprite SpriteSauv
+        {
+            get
+            {
+                return this._spriteSauv;
+            }
+
+            set
+            {
+                this._spriteSauv = value;
+            }
         }
 
         public void AddFadeInterfaceComponent(float delay, float time, Vector2 offset, InterfaceComponent component)

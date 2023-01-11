@@ -42,6 +42,8 @@ namespace TheGame.Core
         private float _cooldownTransformation;
         private int _coopId;
 
+       
+
         public Player(MainGame game, PlayerControls controls, int id, string pseudo, Vector2 position, Color color)
             : base(game, "blue_character", position, 0.10f, 100, 15, 2000, color)
         {
@@ -57,7 +59,7 @@ namespace TheGame.Core
             _pseudo = pseudo;
 
             _swordMode = false;
-            _swordDamage = 10;
+            _swordDamage = 40;
 
             _deadTime = 0;
 
@@ -80,8 +82,8 @@ namespace TheGame.Core
             ScreenStateManager screenStateManager = game.ScreenStateManager;
             GameScreen inGameScreen = screenStateManager.GetScreen(ScreenState.InGame);
 
-             PersoSprite = inGameScreen.Content.Load<SpriteSheet>($"sprites/blue_character/animations.sf", new JsonContentLoader());
-             Epes = inGameScreen.Content.Load<SpriteSheet>($"sprites/blue_character/animation2.sf", new JsonContentLoader());
+            PersoSprite = inGameScreen.Content.Load<SpriteSheet>($"sprites/blue_character/animations.sf", new JsonContentLoader());
+            Epes = inGameScreen.Content.Load<SpriteSheet>($"sprites/blue_character/animation2.sf", new JsonContentLoader());
         }
 
         public PlayerControls Controls
@@ -196,20 +198,20 @@ namespace TheGame.Core
                 if (SwordMode)
                 {
 
-                foreach (Player target in _game.PlayerManager.Players)
-                {
-                    if (target.GetBounds().Intersects(physique) && !target.SwordMode)
+                    foreach (Player target in _game.PlayerManager.Players)
                     {
-                        CoopId = target.Id;
-                        _estSaisie = true;
-                        target.Saisie = true;
-                        break;
-                    }
-                    
+                        if (target.GetBounds().Intersects(physique) && !target.SwordMode)
+                        {
+                            CoopId = target.Id;
+                            _estSaisie = true;
+                            target.Saisie = true;
+                            break;
+                        }
 
+
+                    }
                 }
-                }
-               
+                
 
 
 
@@ -223,8 +225,8 @@ namespace TheGame.Core
                     _cooldownTransformation = 0;
 
                     Sprite = new AnimatedSprite(Epes);
-                    Animation = "arme";
-                    
+
+
                 }
                 else if (Controls.IsTransform() && SwordMode && _cooldownTransformation >= 500)
                 {
@@ -235,7 +237,7 @@ namespace TheGame.Core
 
                     foreach (Player target in _game.PlayerManager.Players)
                     {
-                        if (target.Id == CoopId )
+                        if (target.Id == CoopId)
                         {
                             target.Saisie = false;
                             break;
@@ -244,9 +246,20 @@ namespace TheGame.Core
 
                     }
 
-                    Sprite = new AnimatedSprite(PersoSprite);
+
+                    Sprite = SpriteSauv;
                     Animation = "idle";
 
+                }
+
+
+                if(CooldownTransformation <=1200 && SwordMode)
+                {
+                    Animation = "transformation";
+                }
+                else if (SwordMode)
+                {
+                    Animation = "arme";
                 }
 
                 if (!_estSaisie)
@@ -327,7 +340,7 @@ namespace TheGame.Core
                                 Animation = "combatDe";
 
                             }
-                            else if(!Saisie)
+                            else if (!Saisie)
                             {
 
                                 Animation = "combatG";
@@ -440,13 +453,13 @@ namespace TheGame.Core
                 Random _random = new Random();
                 if (Saisie)
                 {
-                    realDamage = _random.Next(1, this.SwordDamage);
+                    realDamage = _random.Next(3, this.SwordDamage);
 
                 }
                 else
                 {
 
-                    realDamage = _random.Next(1, Damage);
+                    realDamage = _random.Next(10, Damage);
                 }
 
                 entity.Health -= realDamage;
