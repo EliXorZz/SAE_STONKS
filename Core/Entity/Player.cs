@@ -224,6 +224,7 @@ namespace TheGame.Core
 
                     Sprite = new AnimatedSprite(Epes);
                     Animation = "arme";
+                    
                 }
                 else if (Controls.IsTransform() && SwordMode && _cooldownTransformation >= 500)
                 {
@@ -457,7 +458,11 @@ namespace TheGame.Core
                     new Text(_game, ScreenState.InGame, "font_small", 0, 0, $"-{realDamage}", Color.Red));
             }
         }
-        //public void
+        public Rectangle GetBoundplayer()
+        {
+            return new Rectangle((int)Position.X, (int)Position.Y,
+                Sprite.TextureRegion.Width, Sprite.TextureRegion.Height);
+        }
 
     }
 }
