@@ -33,19 +33,7 @@ namespace TheGame.Screen
             Button playButton = new Button(
                 _game, ScreenState.MainMenu, "main_button", "Start",
                 width / 2, 200,
-                () =>
-                {
-                    _game.MapManager.SelectMap("default");
-
-                    _game.MonsterManager.ClearMonsters();
-                    _game.PlayerManager.ClearPlayers();
-
-                    _game.PlayerManager.CreatePlayer(_game, new PlayerControls(Keys.Left, Keys.Right, Keys.Up, Keys.Down, Keys.Enter), "Joueur 1", Color.DarkCyan);
-                    _game.PlayerManager.CreatePlayer(_game, new PlayerControls(Keys.Q, Keys.D, Keys.Z, Keys.S,Keys.E), "Joueur 2", Color.DeepPink);
-
-                    _game.ScreenStateManager.CurrentScreen = ScreenState.InGame;
-                }
-            );
+                () => _game.ScreenStateManager.CurrentScreen = ScreenState.MapSelector);
             
             Button exitButton = new Button(
                 _game, ScreenState.MainMenu, "main_button", "Exit",
@@ -54,10 +42,9 @@ namespace TheGame.Screen
             );
 
             Button didact = new Button(
-                _game, ScreenState.MainMenu, "little_button", "?", width / 2 + 450, 450, () =>
-                {
-                    _game.ScreenStateManager.CurrentScreen = ScreenState.DidactMenu;
-                });
+                _game, ScreenState.MainMenu, "little_button", "?", width / 2 + 450, 450,
+                () => _game.ScreenStateManager.CurrentScreen = ScreenState.DidactMenu);
+
             _buttons = new Button[]{ playButton, exitButton, didact};
             _background = _game.Content.Load<Texture2D>("ui/main_background");
         }

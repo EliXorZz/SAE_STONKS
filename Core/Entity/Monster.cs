@@ -13,38 +13,36 @@ namespace TheGame.Core
         private float _speed;
 
         private bool _attack;
+        private float _attackDelay;
+
         private float _deadTime;
-        private int _healthSave;
-        private DateTime _attackDelay;
+
         private bool _ragdoll;
-        private DateTime _ragdollCoolDown;
+        private float _ragdollCooldown;
+
+        private int _healthSave;
+
         private ProgressBar _healthBar;
-        private ProgressBar _cooldownBar;
-        private DateTime _attend;
 
         public Monster(MainGame game, string spriteName, Vector2 position, float speed, int health, int damage, int damageCooldown)
             : base(game, spriteName, position, 0.15f, health, damage, damageCooldown, Color.White)
         {
             _game = game;
             _speed = speed;
-            Ragdoll = false;
+
             _attack = false;
+            _attackDelay = 0;
+
             _deadTime = 0;
-            _healthSave = health;
-            _attackDelay = DateTime.Now;
-            Attend = DateTime.Now;
+
+            _ragdoll = false;
+            _ragdollCooldown = 0;
 
             _healthBar =
                 new ProgressBar(_game, ScreenState.InGame, 0, 0 - 8, 50,
                     8, 1, (float) Health / MaxHealth, String.Empty,
                     Color.Transparent, Color.Transparent, Color.DarkRed
                 );
-
-            //_cooldownBar =
-            //    new ProgressBar(_game, ScreenState.InGame, 0, 0, 20,
-            //        4, 1, 1 - (float) (DateTime.Now.Millisecond / TempsAnimation.Millisecond), String.Empty,
-            //        Color.Transparent, Color.Transparent, new Color(241, 196, 15)
-            //    );
         }
 
         public Monster(MainGame game, string spriteName, float speed, int health, int damage, int damageCooldown)
@@ -60,11 +58,16 @@ namespace TheGame.Core
         {
             get => _attack;
         }
-        public bool Ragdoll { get => _ragdoll; set => _ragdoll = value; }
-        public DateTime Attend { get => _attend; set => _attend = value; }
+
+        public bool Ragdoll {
+            get => _ragdoll;
+            set => _ragdoll = value;
+        }
 
         public override void Update(GameTime gameTime, Map map)
         {
+            float elapsed = (float) gameTime.ElapsedGameTime.TotalMilliseconds;
+
             if (!IsDead)
             {
                 float distance = float.MaxValue;
@@ -87,7 +90,7 @@ namespace TheGame.Core
                     Rectangle targetBounds = target.GetBounds();
                     Vector2 targetCenter = target.GetCenter();
 
-                    if ((int) monsterCenter.X != (int)targetCenter.X && !IsAttack && !Ragdoll)
+                    if (distance > monsterBounds.Width / 2)
                     {
                         if (targetCenter.X < monsterCenter.X)
                         {
@@ -106,12 +109,15 @@ namespace TheGame.Core
                         Animation = "idle";
                     }
 
-                    if (!IsAttack && monsterBounds.Intersects(targetBounds) && !Ragdoll && DateTime.Now >= Attend)
+                    _attackDelay += elapsed;
+                    _ragdollCooldown += elapsed;
+
+                    if (!IsAttack && monsterBounds.Intersects(targetBounds) && !Ragdoll && _attackDelay >= 1800)
                     {
                         _attack = true;
-                        _attackDelay = DateTime.Now.AddMilliseconds(1800);
+                        _attackDelay = 0;
+
                         _healthSave = Health;
-                        
                     }
 
                     if (IsAttack && targetCenter.X < monsterCenter.X)
@@ -119,33 +125,27 @@ namespace TheGame.Core
                     else if (IsAttack && targetCenter.X > monsterCenter.X)
                         Animation = "attack_right";
 
-                    if (IsAttack && DateTime.Now >= _attackDelay)
+                    if (IsAttack && _attackDelay >= 1800)
                     {
                         _attack = false;
-                        Attend = DateTime.Now.AddMilliseconds(3000);
 
                         if (monsterBounds.Intersects(targetBounds))
                             Attack(gameTime, target);
                     }
-                    if(_healthSave > Health && !Ragdoll && !IsAttack)
+
+                    if (_healthSave > Health && !Ragdoll && !IsAttack)
                     {
-                        Ragdoll = true;
+                        _ragdoll = true;
+                        _ragdollCooldown = 0;
+
                         _healthSave = Health;
-                        _ragdollCoolDown = DateTime.Now.AddMilliseconds(1800);
-
-
                     }
-                    if(DateTime.Now >= _ragdollCoolDown && Ragdoll)
-                    {
-                        Ragdoll = false;
 
-                    }
+                    if (_ragdollCooldown >= 1800 && Ragdoll)
+                        _ragdoll = false;
+
                     if (Ragdoll)
-                    {
                         Animation = "take_hit";
-
-                    }
-
                 }
                 else
                 {
@@ -154,7 +154,7 @@ namespace TheGame.Core
                 }
 
                 if (IsCollisionMap(map, 0, 1))
-                    if (IsCollisionMap(map, -1, 0) || IsCollisionMap(map, 1, 0))
+                    if (IsCollisionMap(map, -2, 0) || IsCollisionMap(map, 2, 0))
                         Velocity.Y = -3.5f;
 
                 int barOffsetY = -4;
@@ -163,17 +163,10 @@ namespace TheGame.Core
                 _healthBar.Y = monsterBounds.Y - barOffsetY - 8;
                 _healthBar.Progress = (float) Health / MaxHealth;
 
-                //_cooldownBar.X = monsterBounds.X;
-                //_cooldownBar.Y = monsterBounds.Y - barOffsetY;
-                //_cooldownBar.Progress = 1 - (float) (DateTime.Now.Millisecond / TempsAnimation.Millisecond);
-
                 _healthBar.Update();
-                //_cooldownBar.Update();
             }
             else
             {
-                float elapsed = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
-
                 if (_deadTime < 800)
                 {
                     _deadTime += elapsed;
@@ -193,10 +186,7 @@ namespace TheGame.Core
         public override void Draw(SpriteBatch spriteBatch, SpriteBatch globalUIBatch)
         {
             if (!IsDead)
-            {
                 _healthBar.Draw(spriteBatch);
-                //_cooldownBar.Draw(spriteBatch);
-            }
 
             base.Draw(spriteBatch, globalUIBatch);
 
