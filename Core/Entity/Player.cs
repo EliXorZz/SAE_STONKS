@@ -2,6 +2,11 @@
 using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Content;
+using MonoGame.Extended.Screens;
+using MonoGame.Extended.Serialization;
+using MonoGame.Extended.Sprites;
+using TheGame.Manager;
 using TheGame.Screen;
 using TheGame.UI.Components;
 
@@ -25,6 +30,9 @@ namespace TheGame.Core
 
         private float _attackDelay;
         private float _lastAttack;
+
+        private SpriteSheet _epes;
+        private SpriteSheet _persoSprite;
 
         private float _regenTime;
 
@@ -68,6 +76,12 @@ namespace TheGame.Core
                 $"Player {Pseudo} | {Health}/{MaxHealth}",
                 Color.White, Color, new Color(Math.Min(Color.R + 100, 255), Math.Min(Color.G + 100, 255), Math.Min(Color.B + 100, 255))
             );
+
+            ScreenStateManager screenStateManager = game.ScreenStateManager;
+            GameScreen inGameScreen = screenStateManager.GetScreen(ScreenState.InGame);
+
+             PersoSprite = inGameScreen.Content.Load<SpriteSheet>($"sprites/blue_character/animations.sf", new JsonContentLoader());
+             Epes = inGameScreen.Content.Load<SpriteSheet>($"sprites/blue_character/animation2.sf", new JsonContentLoader());
         }
 
         public PlayerControls Controls
@@ -141,6 +155,32 @@ namespace TheGame.Core
             }
         }
 
+        public SpriteSheet Epes
+        {
+            get
+            {
+                return this._epes;
+            }
+
+            set
+            {
+                this._epes = value;
+            }
+        }
+
+        public SpriteSheet PersoSprite
+        {
+            get
+            {
+                return this._persoSprite;
+            }
+
+            set
+            {
+                this._persoSprite = value;
+            }
+        }
+
         public override void Update(GameTime gameTime, Map map)
         {
 
@@ -182,7 +222,8 @@ namespace TheGame.Core
                     SwordMode = true;
                     _cooldownTransformation = 0;
 
-
+                    Sprite = new AnimatedSprite(Epes);
+                    Animation = "arme";
                 }
                 else if (Controls.IsTransform() && SwordMode && _cooldownTransformation >= 500)
                 {
@@ -202,6 +243,8 @@ namespace TheGame.Core
 
                     }
 
+                    Sprite = new AnimatedSprite(PersoSprite);
+                    Animation = "idle";
 
                 }
 

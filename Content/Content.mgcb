@@ -126,6 +126,18 @@
 /processorParam:TextureFormat=Color
 /build:sprites/blue_character/texture.png
 
+#begin sprites/blue_character/texture_transformation.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:sprites/blue_character/texture_transformation.png
+
 #begin sprites/goblin/texture.png
 /importer:TextureImporter
 /processor:TextureProcessor

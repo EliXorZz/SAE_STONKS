@@ -77,6 +77,8 @@ namespace TheGame.Core
         public AnimatedSprite Sprite
         {
             get => _sprite;
+            set => _sprite = value;
+
         }
 
         public string Animation
