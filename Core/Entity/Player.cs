@@ -32,6 +32,7 @@ namespace TheGame.Core
         private ProgressBar _healthBar;
 
         private float _cooldownTransformation;
+        private int _coopId;
 
         public Player(MainGame game, PlayerControls controls, int id, string pseudo, Vector2 position, Color color)
             : base(game, "blue_character", position, 0.10f, 100, 15, 2000, color)
@@ -127,6 +128,19 @@ namespace TheGame.Core
             }
         }
 
+        public int CoopId
+        {
+            get
+            {
+                return this._coopId;
+            }
+
+            set
+            {
+                this._coopId = value;
+            }
+        }
+
         public override void Update(GameTime gameTime, Map map)
         {
 
@@ -136,22 +150,24 @@ namespace TheGame.Core
 
                 float total = (float)gameTime.TotalGameTime.TotalMilliseconds;
                 float elapsed = (float)gameTime.ElapsedGameTime.Milliseconds;
-                int idtarget = -1;  
                 Rectangle physique = GetBounds();
 
 
+                if (SwordMode)
+                {
 
                 foreach (Player target in _game.PlayerManager.Players)
                 {
-                    if (target.GetBounds().Intersects(physique) && !target.SwordMode && SwordMode)
+                    if (target.GetBounds().Intersects(physique) && !target.SwordMode)
                     {
-                        idtarget = target.Id;
+                        CoopId = target.Id;
                         _estSaisie = true;
                         target.Saisie = true;
                         break;
                     }
                     
 
+                }
                 }
                
 
@@ -177,7 +193,7 @@ namespace TheGame.Core
 
                     foreach (Player target in _game.PlayerManager.Players)
                     {
-                        if (target.Id == idtarget )
+                        if (target.Id == CoopId )
                         {
                             target.Saisie = false;
                             break;
