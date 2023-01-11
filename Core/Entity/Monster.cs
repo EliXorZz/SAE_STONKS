@@ -110,8 +110,7 @@ namespace TheGame.Core
                     {
                         _attack = true;
                         _attackDelay = DateTime.Now.AddMilliseconds(1800);
-                        _healthSave = Health;
-                        
+                        _healthSave = Health;    
                     }
 
                     if (IsAttack && targetCenter.X < monsterCenter.X)
@@ -154,7 +153,7 @@ namespace TheGame.Core
                 }
 
                 if (IsCollisionMap(map, 0, 1))
-                    if (IsCollisionMap(map, -1, 0) || IsCollisionMap(map, 1, 0))
+                    if (IsCollisionMap(map, -2, 0) || IsCollisionMap(map, 2, 0))
                         Velocity.Y = -3.5f;
 
                 int barOffsetY = -4;

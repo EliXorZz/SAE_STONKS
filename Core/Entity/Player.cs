@@ -55,8 +55,6 @@ namespace TheGame.Core
             int height = 40;
             int gap = 10;
 
-
-
             _healthBar = new ProgressBar(
                 _game, ScreenState.InGame, 20, 20 + Id * (height + gap), width, height, 1,
                 (float)Health / MaxHealth,
@@ -130,10 +128,7 @@ namespace TheGame.Core
 
                 }
                 
-                    cooldownTransformation += elapsed;
-                
-
-
+                cooldownTransformation += elapsed;
 
                 if (Controls.IsAttack() && !SwordMode)
                 {
@@ -204,7 +199,7 @@ namespace TheGame.Core
 
                     if (_regenTime >= 1500)
                     {
-                        int newHealth = 5;
+                        int newHealth = 2;
 
                         Health = Math.Min(MaxHealth, Health + newHealth);
 

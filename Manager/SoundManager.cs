@@ -18,7 +18,7 @@ namespace TheGame.Manager
 
         public void Initial(MainGame game)
         {
-            _swordsound = game.Content.Load<SoundEffect>("sword");
+            //_swordsound = game.Content.Load<SoundEffect>("sword");
         }
 
         public void PlayEffectSword()

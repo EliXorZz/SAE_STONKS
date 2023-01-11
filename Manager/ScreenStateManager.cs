@@ -28,6 +28,7 @@ public class ScreenStateManager
         _gameScreens.Add(ScreenState.InGame, new InGameScreen(game));
         _gameScreens.Add(ScreenState.DidactMenu, new DidactScreen(game));
         _gameScreens.Add(ScreenState.GameOver, new Gameoverscreen(game));
+        _gameScreens.Add(ScreenState.MapSelector, new MapSelectorScreen(game));
     }
 
     public ScreenState CurrentScreen

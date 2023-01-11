@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using Microsoft.Xna.Framework;
 using TheGame.Core;
 
@@ -8,21 +8,29 @@ namespace TheGame.Manager
     {
         private MainGame _game;
         
-        private Dictionary<string, Map> _maps;
+        private Map[] _maps;
+
+        private int _mapIndex;
         private Map _currentMap;
 
         public MapManager(MainGame game)
         {
             _game = game;
-            _maps = new Dictionary<string, Map>();
-            
-            // Load all maps
-            AddMap("default");
+
+            _maps = new Map[]
+            {
+                new Map(_game, "default"),
+                new Map(_game, "default")
+            };
+
+
+            _mapIndex = 0;
+            _currentMap = _maps[_mapIndex];
         }
 
-        public Dictionary<string, Map>.ValueCollection Maps
+        public Map[] Maps
         {
-            get => _maps.Values;
+            get => _maps;
         }
 
         public Map CurrentMap
@@ -30,20 +38,20 @@ namespace TheGame.Manager
             get => _currentMap;
         }
 
-        public void AddMap(string name)
+        public void SelectMap(int index)
         {
-            Map map = new Map(_game, name);
-            _maps.Add(name, map);
+            _mapIndex = index;
+            _currentMap = _maps[index];
         }
 
-        public void RemoveMap(string name)
+        public void Before()
         {
-            _maps.Remove(name);
+            SelectMap(Math.Max(0, _mapIndex - 1));
         }
 
-        public void SelectMap(string name)
+        public void Next()
         {
-            _currentMap = _maps[name];
+            SelectMap(Math.Min(_maps.Length - 1, _mapIndex + 1));
         }
 
         public void Update(GameTime gameTime)
