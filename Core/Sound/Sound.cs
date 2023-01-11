@@ -147,10 +147,12 @@ namespace TheGame.Core.Sound
             {
                 if(MediaPlayer.State != MediaState.Playing)
                     MediaPlayer.Play(Ost);
-                MediaPlayer.Volume = (float)0.3;
+                MediaPlayer.Volume = (float)0.5;
                 MediaPlayer.IsRepeating = true;
             }
         }
+
+        
 
         
 

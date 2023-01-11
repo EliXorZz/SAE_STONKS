@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Media;
 using TheGame.Core;
 using TheGame.Core.Sound;
 
@@ -45,7 +46,12 @@ namespace TheGame.Manager
                     
             }
         }
-        
-        
+
+        public void Stop()
+        {
+            MediaPlayer.Stop();
+        }
+
+
     }
 }

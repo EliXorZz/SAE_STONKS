@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using TheGame.Manager;
 using TheGame.Screen;
 using TheGame.UI.Components;
 
@@ -61,7 +60,7 @@ namespace TheGame.Core
                 (float)Health / MaxHealth,
                 $"Player {Pseudo} | {Health}/{MaxHealth}",
                 Color.White, Color, new Color(Math.Min(Color.R + 100, 255), Math.Min(Color.G + 100, 255), Math.Min(Color.B + 100, 255))
-            ); 
+            );
         }
 
         public PlayerControls Controls
@@ -104,9 +103,9 @@ namespace TheGame.Core
             set => _lastAttack = value;
         }
 
-        public float CooldownTransformation 
-        { 
-          get => _cooldownTransformation; 
+        public float CooldownTransformation
+        {
+            get => _cooldownTransformation;
         }
 
         public override void Update(GameTime gameTime, Map map)
@@ -122,7 +121,7 @@ namespace TheGame.Core
                     _cooldownTransformation = 0;
 
                 }
-                else if (Controls.IsTransform() && SwordMode && _cooldownTransformation >= 500  )
+                else if (Controls.IsTransform() && SwordMode && _cooldownTransformation >= 500)
                 {
                     SwordMode = false;
                     _cooldownTransformation = 0;
@@ -149,17 +148,16 @@ namespace TheGame.Core
                     _sens = -1;
                     Velocity.X = -1;
 
-                    
-
                     if (Controls.IsAttack())
-                        Animation = "combatG";
+                    {
                         _game.SoundManager.PlayEffect("sword", gameTime);
-
+                        Animation = "combatG";
                     }
                     else
                     {
-                        Animation = "courseG";
                         if (IsCollisionMap(map, 0, 1) && !SwordMode) _game.SoundManager.PlayEffect("pas", gameTime);
+                        Animation = "courseG";
+
                     }
                         
 
@@ -169,16 +167,15 @@ namespace TheGame.Core
                     _sens = 1;
                     Velocity.X = 1;
 
-                    
                     if (Controls.IsAttack())
-                        Animation = "combatD";
+                    {
                         _game.SoundManager.PlayEffect("sword", gameTime);
+                        Animation = "combatD";
                     }
-
                     else
                     {
+                        if(IsCollisionMap(map, 0, 1) && !SwordMode) _game.SoundManager.PlayEffect("pas", gameTime);
                         Animation = "courseD";
-                        if (IsCollisionMap(map, 0, 1) && !SwordMode) _game.SoundManager.PlayEffect("pas", gameTime);
                     }
                         
                 }
@@ -190,21 +187,24 @@ namespace TheGame.Core
                     {
                         _game.SoundManager.PlayEffect("sword", gameTime);
                         Animation = "combatD";
+                    }
+
+                        
                     else if (Controls.IsAttack() && _sens == -1)
                     {
                         _game.SoundManager.PlayEffect("sword", gameTime);
                         Animation = "combatG";
+                    }
+                        
                     else
                         Animation = "idle";
                 }
 
                 if (Controls.IsJump() && IsCollisionMap(map, 0, 1) && !SwordMode)
                     Velocity.Y = -3;
-                
-                    
 
                 if (Health < MaxHealth && _lastAttack + 6000 < total)
-                    {
+                {
                     _regenTime += elapsed;
 
                     if (_regenTime >= 1500)
@@ -228,7 +228,7 @@ namespace TheGame.Core
 
                 _healthBar.Update();
             }
-            else if(!SwordMode)
+            else if (!SwordMode)
             {
                 float elapsed = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
 
