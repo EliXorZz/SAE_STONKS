@@ -29,10 +29,14 @@ namespace TheGame.Screen
         public override void Initialize()
         {
             _game.IsMouseVisible = true;
+
+            
         }
 
         public override void Update(GameTime gameTime)
         {
+
+            _game.SoundManager.PlayEffect("main", gameTime);
             _game.MapManager.Update(gameTime);
             _game.EntityManager.Update(gameTime);
             _game.WaveManager.Update();

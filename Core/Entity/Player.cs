@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using TheGame.Manager;
 using TheGame.Screen;
 using TheGame.UI.Components;
 
@@ -153,13 +154,20 @@ namespace TheGame.Core
                     _sens = -1;
                     Velocity.X = -1;
 
+                    
+
                     if (Controls.IsAttack())
                     {
                         Animation = "combatG";
-                        
+                        _game.SoundManager.PlayEffect("sword", gameTime);
+
                     }
                     else
+                    {
                         Animation = "courseG";
+                        if (IsCollisionMap(map, 0, 1) && !SwordMode) _game.SoundManager.PlayEffect("pas", gameTime);
+                    }
+                        
 
                 }
                 else if (Controls.IsRight() && !SwordMode)
@@ -167,14 +175,19 @@ namespace TheGame.Core
                     _sens = 1;
                     Velocity.X = 1;
 
+                    
                     if (Controls.IsAttack())
                     {
                         Animation = "combatD";
-                        
+                        _game.SoundManager.PlayEffect("sword", gameTime);
+                    }
+
+                    else
+                    {
+                        Animation = "courseD";
+                        if (IsCollisionMap(map, 0, 1) && !SwordMode) _game.SoundManager.PlayEffect("pas", gameTime);
                     }
                         
-                    else
-                        Animation = "courseD";
                 }
                 else if (!SwordMode)
                 {
@@ -182,12 +195,12 @@ namespace TheGame.Core
 
                     if (Controls.IsAttack() && _sens == 1)
                     {
-                        
+                        _game.SoundManager.PlayEffect("sword", gameTime);
                         Animation = "combatD";
                     }
                     else if (Controls.IsAttack() && _sens == -1)
                     {
-                        
+                        _game.SoundManager.PlayEffect("sword", gameTime);
                         Animation = "combatG";
                     }
                     else
@@ -196,6 +209,8 @@ namespace TheGame.Core
 
                 if (Controls.IsJump() && IsCollisionMap(map, 0, 1) && !SwordMode)
                     Velocity.Y = -3;
+                
+                    
 
                 if (Health < MaxHealth && _lastAttack + 6000 < total)
                 if (_lastAttack + 6000 < total &&!SwordMode)

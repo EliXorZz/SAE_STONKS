@@ -77,14 +77,14 @@ public class MainGame : Game
 
         _waveManager = new WaveManager(this);
 
-        _soundManager = new SoundManager();
+        _soundManager = new SoundManager(this);
 
         base.Initialize();
     }
 
     protected override void LoadContent()
     {
-        SoundManager.Initial(this);
+        _soundManager.LoadContent(this);
         _graphics.PreferredBackBufferWidth = 1280;
         _graphics.PreferredBackBufferHeight = 720;
         _graphics.ApplyChanges();

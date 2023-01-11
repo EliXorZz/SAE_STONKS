@@ -4,27 +4,48 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
+using TheGame.Core;
+using TheGame.Core.Sound;
 
 namespace TheGame.Manager
 {
     public class SoundManager
     {
-
         private MainGame _game;
+        private List<Sound> _sounds;
 
-        SoundEffect _swordsound;
-        SoundEffect _walksound;
-
-        public void Initial(MainGame game)
+        public SoundManager(MainGame game)
         {
-            _swordsound = game.Content.Load<SoundEffect>("sword");
+            _game = game;
+            _sounds = new List<Sound>();
+
+            _sounds.Add(new Sound(_game, "SE", 1.8, "sword"));
+            _sounds.Add(new Sound(_game, "SE", 0.42, "pas"));
+            _sounds.Add(new Sound(_game, "OST", 0, "main"));
         }
 
-        public void PlayEffectSword()
+        public void LoadContent(MainGame game)
         {
-            _swordsound.Play();
+            foreach (Sound i in _sounds)
+                i.LoadSound();
+            
         }
+
+        public void PlayEffect(string name, GameTime gametime)
+        {
+            foreach(Sound i in _sounds)
+            {
+                if (i.Namesound == name)
+                {
+                    i.Play(gametime);
+                    return;
+                }
+                    
+            }
+        }
+        
         
     }
 }
