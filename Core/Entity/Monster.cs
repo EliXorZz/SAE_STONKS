@@ -75,7 +75,8 @@ namespace TheGame.Core
 
                 foreach (Player player in _game.PlayerManager.Players)
                 {
-                    if (GetDistanceBetweenEntity(player) < distance)
+                    
+                    if (GetDistanceBetweenEntity(player) < distance && !player.SwordMode)
                     {
                         distance = GetDistanceBetweenEntity(player);
                         target = player;
