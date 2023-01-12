@@ -42,7 +42,7 @@ namespace TheGame.Core
         private float _cooldownTransformation;
         private int _coopId;
 
-       
+
 
         public Player(MainGame game, PlayerControls controls, int id, string pseudo, Vector2 position, Color color)
             : base(game, "blue_character", position, 0.10f, 100, 15, 2000, color)
@@ -211,7 +211,7 @@ namespace TheGame.Core
 
                     }
                 }
-                
+
 
 
 
@@ -253,7 +253,7 @@ namespace TheGame.Core
                 }
 
 
-                if(CooldownTransformation <=1200 && SwordMode)
+                if (CooldownTransformation <= 1200 && SwordMode)
                 {
                     Animation = "transformation";
                 }
@@ -404,21 +404,21 @@ namespace TheGame.Core
 
 
                 }
-                               
 
 
 
 
-                    if (_estSaisie)
-                    {
-                        Sprite.IsVisible = false;
-                    }
-                    else
-                    {
-                        Sprite.IsVisible = true;
-                    }
 
-                
+                if (_estSaisie)
+                {
+                    Sprite.IsVisible = false;
+                }
+                else
+                {
+                    Sprite.IsVisible = true;
+                }
+
+
             }
             else
             {
@@ -432,6 +432,20 @@ namespace TheGame.Core
                 }
                 else
                 {
+                    foreach (Player target in _game.PlayerManager.Players)
+                    {
+                        if (target.Id == CoopId)
+                        {
+                            target.SwordMode = false;
+                            target._estSaisie = false;
+                            target.Sprite = SpriteSauv;
+                            target.Sprite.IsVisible = true;
+                            Animation = "idle";
+                        }
+                    }
+
+
+
                     _game.PlayerManager.RemovePlayer(this);
                 }
             }
