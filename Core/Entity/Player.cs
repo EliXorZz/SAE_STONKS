@@ -219,7 +219,7 @@ namespace TheGame.Core
 
                 _cooldownTransformation += elapsed;
 
-                if (Controls.IsTransform() && !SwordMode && _cooldownTransformation >= 500)
+                if (Controls.IsTransform() && !SwordMode && _cooldownTransformation >= 500 && !Saisie)
                 {
                     SwordMode = true;
                     _cooldownTransformation = 0;
@@ -397,38 +397,43 @@ namespace TheGame.Core
                             _regenTime = 0;
                         }
                     }
-
+                    _healthBar.Update();
                     _healthBar.Progress = (float)Health / MaxHealth;
                     _healthBar.Input = $"Player {Pseudo} | {Health}/{MaxHealth}";
 
-                    _healthBar.Update();
+
+
                 }
-                else if (!SwordMode)
-                {
-                    elapsed = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+                               
 
-                    if (_deadTime < 800)
+
+
+
+                    if (_estSaisie)
                     {
-                        _deadTime += elapsed;
-                        Animation = "death";
-
-                        Sprite.Alpha = _deadTime / 800;
+                        Sprite.IsVisible = false;
                     }
                     else
                     {
-                        _game.PlayerManager.RemovePlayer(this);
+                        Sprite.IsVisible = true;
                     }
-                }
-                if (_estSaisie)
+
+                
+            }
+            else
+            {
+                float elapsed = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+                if (_deadTime < 800)
                 {
-                    Sprite.IsVisible = false;
+                    _deadTime += elapsed;
+                    Animation = "death";
+
+                    Sprite.Alpha = _deadTime / 800;
                 }
                 else
                 {
-                    Sprite.IsVisible = true;
+                    _game.PlayerManager.RemovePlayer(this);
                 }
-
-
             }
 
             base.Update(gameTime, map);
