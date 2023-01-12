@@ -14,6 +14,7 @@ namespace TheGame.UI.Components
 {
     public class Button : InterfaceComponent
     {
+        private MainGame _game;
         private AnimatedSprite _sprite;
 
         private int _width, _height;
@@ -25,6 +26,8 @@ namespace TheGame.UI.Components
 
         public Button(MainGame game, ScreenState state, string button, string input, int x, int y, Action action)
         {
+            _game = game;
+
             ScreenStateManager screenStateManager = game.ScreenStateManager;
             GameScreen gameScreen = screenStateManager.GetScreen(state);
             
@@ -80,8 +83,11 @@ namespace TheGame.UI.Components
             float elapsed = (float) gameTime.ElapsedGameTime.TotalMilliseconds;
             _delay += elapsed;
 
+            if (hovered && Mouse.GetState().LeftButton == ButtonState.Pressed) _game.SoundManager.PlayEffect("click", gameTime);
+
             if (hovered)
             {
+                
                 _sprite.Play("true");
                 _text.Y = (int) (Y + Height / 2 - _text.Size.Y / 2) + 5;
             }
@@ -91,10 +97,11 @@ namespace TheGame.UI.Components
                 _text.Y = (int) (Y + Height / 2 - _text.Size.Y / 2) - 5;
             }
 
-            if (hovered && _delay >= 1000 && Mouse.GetState().LeftButton == ButtonState.Pressed)
+            if (hovered && _delay >= 300 && Mouse.GetState().LeftButton == ButtonState.Pressed)
             {
-                _action();
+                
                 _delay = 0;
+                _action();
             }
             
             _sprite.Update(gameTime);
