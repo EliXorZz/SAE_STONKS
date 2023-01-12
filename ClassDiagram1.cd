@@ -1,0 +1,271 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
+  <Class Name="TheGame.Core.PlayerControls">
+    <Position X="3.25" Y="7.25" Width="5.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAACAAQYAAAAAAAAAIAAAAQgAAAAAAEEAAEA=</HashCode>
+      <FileName>Core\Controls\PlayerControls.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TheGame.Core.Entity">
+    <Position X="18" Y="1.25" Width="8.5" />
+    <TypeIdentifier>
+      <HashCode>IAQACADAgAsICgAggAABECAAoAAABAQSAAEAgAAEQAU=</HashCode>
+      <FileName>Core\Entity\Entity.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TheGame.Core.Goblin">
+    <Position X="16.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Core\Entity\Goblin.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TheGame.Core.Monster">
+    <Position X="10" Y="9.5" Width="7.75" />
+    <InheritanceLine Type="TheGame.Core.Entity" ManuallyRouted="true">
+      <Path>
+        <Point X="22.25" Y="8.834" />
+        <Point X="22.25" Y="9.108" />
+        <Point X="13.875" Y="9.108" />
+        <Point X="13.875" Y="9.5" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAQAAQCAAAAAAwAAAABAAAABAIAAAAEARACAAAAAEEQ=</HashCode>
+      <FileName>Core\Entity\Monster.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TheGame.Core.Player">
+    <Position X="18" Y="9.5" Width="8.5" />
+    <TypeIdentifier>
+      <HashCode>AAQCAACAGAAAAgkFAABACAAAAIAAAAEgQAWgCAAAAAQ=</HashCode>
+      <FileName>Core\Entity\Player.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TheGame.Core.Squeleton">
+    <Position X="14.5" Y="7.5" Width="1.5" />
+    <InheritanceLine Type="TheGame.Core.Monster" ManuallyRouted="true" FixedToPoint="true">
+      <Path>
+        <Point X="13.875" Y="9.5" />
+        <Point X="13.875" Y="9.108" />
+        <Point X="15.25" Y="9.108" />
+        <Point X="15.25" Y="8.733" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Core\Entity\Squeleton.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TheGame.Core.Map">
+    <Position X="3.25" Y="10.75" Width="5.5" />
+    <TypeIdentifier>
+      <HashCode>AQQAIAAAAAAAIgAAAAAAABQAAAAAAAAIAAAAAAAIAAA=</HashCode>
+      <FileName>Core\Map\Map.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TheGame.Core.MapLayer">
+    <Position X="3.25" Y="14.25" Width="5.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAACAgAAAAAAAAAAAAAAAAAAAQAAAAAAA=</HashCode>
+      <FileName>Core\Map\MapLayer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TheGame.Core.Sound.Sound">
+    <Position X="10.25" Y="18.5" Width="5.25" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAACCAACAQRAAAAAAAIAAgAAQAghQAAAgAAAAQ=</HashCode>
+      <FileName>Core\Sound\Sound.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TheGame.Core.Camera">
+    <Position X="13.25" Y="14.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAIAACAAAAAgAAAAAAAAAQAAACA=</HashCode>
+      <FileName>Core\Camera.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TheGame.Manager.EntityManager">
+    <Position X="9" Y="1.25" Width="5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAgAIAgAAAAABAAAAAAAAAwAAAAEAACAAAAE=</HashCode>
+      <FileName>Manager\EntityManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TheGame.Manager.MapManager">
+    <Position X="10" Y="14.5" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AgQAAAABAAAAAgAAAAAAAAAAAAAAAIBAAAEAAASAAAQ=</HashCode>
+      <FileName>Manager\MapManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TheGame.Manager.MonsterManager">
+    <Position X="9" Y="5" Width="5" />
+    <TypeIdentifier>
+      <HashCode>AABAQAIAIAAAAAAgAAAAAAAAAAAAAAAgAAACAAAAAAA=</HashCode>
+      <FileName>Manager\MonsterManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TheGame.Manager.PlayerManager">
+    <Position X="3.25" Y="3.75" Width="5.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAEAAAAAABAAABAAAAAEQBAgAAAAAACCAAAAAAA=</HashCode>
+      <FileName>Manager\PlayerManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TheGame.Manager.ScreenStateManager">
+    <Position X="18.5" Y="16" Width="4" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAAAAAAAAAAAAAAAAQAABAAAACAAAEAAAAAAAAQ=</HashCode>
+      <FileName>Manager\ScreenStateManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TheGame.Manager.SoundManager">
+    <Position X="23" Y="16" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIBAAAAAAAAQ=</HashCode>
+      <FileName>Manager\SoundManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TheGame.Manager.WaveManager">
+    <Position X="3.25" Y="1.25" Width="5.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAU=</HashCode>
+      <FileName>Manager\WaveManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TheGame.Screen.DidactScreen">
+    <Position X="23.75" Y="18.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAgAAAAAAAAAAAAABAAAAAIAAAQAAAAQ=</HashCode>
+      <FileName>Screen\DidactScreen.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TheGame.Screen.Gameoverscreen">
+    <Position X="20.5" Y="19" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAgAAAAAAAAAAAAABAAAAAIAAAQAAAAQ=</HashCode>
+      <FileName>Screen\Gameoverscreen.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TheGame.Screen.InGameScreen">
+    <Position X="17.25" Y="19" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAwAAAAAAAAAAAAAAAgAAAAAAACBAAAQ=</HashCode>
+      <FileName>Screen\InGameScreen.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TheGame.Screen.MainMenuScreen">
+    <Position X="6.75" Y="16" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAwAAAAAAAAAAAAABAAAAAIAAAQAAAAQ=</HashCode>
+      <FileName>Screen\MainMenuScreen.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TheGame.Screen.MapSelectorScreen">
+    <Position X="3.25" Y="16" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAwAAAAAAAAAAAAABAAAIAIAAAQAAAAQ=</HashCode>
+      <FileName>Screen\MapSelectorScreen.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TheGame.Screen.PauseMenuScreen">
+    <Position X="3.25" Y="19.5" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAwAAAAAAAAAAAAABAAAAAIAAAAAAAAQ=</HashCode>
+      <FileName>Screen\PauseMenuScreen.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TheGame.UI.Components.Button">
+    <Position X="25.25" Y="26" Width="6" />
+    <InheritanceLine Type="TheGame.UI.Components.InterfaceComponent" ManuallyRouted="true">
+      <Path>
+        <Point X="21.75" Y="24.391" />
+        <Point X="21.75" Y="25.542" />
+        <Point X="28.25" Y="25.542" />
+        <Point X="28.25" Y="26" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAQAAAAEBAiAAgAAAABAAEAAABAAAAAIAAEAgAAAAAA=</HashCode>
+      <FileName>UI\Components\Button.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TheGame.UI.Components.FadeInterfaceComponent">
+    <Position X="13" Y="31" Width="7.25" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAEAAAgAgAAIAAAAAAAAAAAABAAAAAAEAAAAAA=</HashCode>
+      <FileName>UI\Components\FadeInterfaceComponent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TheGame.UI.Components.InterfaceComponent">
+    <Position X="20.5" Y="22" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAABgAAAAYAA=</HashCode>
+      <FileName>UI\Components\InterfaceComponent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TheGame.UI.Components.ProgressBar">
+    <Position X="14" Y="26" Width="11" />
+    <InheritanceLine Type="TheGame.UI.Components.InterfaceComponent" ManuallyRouted="true">
+      <Path>
+        <Point X="21.75" Y="24.391" />
+        <Point X="21.75" Y="25.63" />
+        <Point X="19.5" Y="25.63" />
+        <Point X="19.5" Y="26" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAYAAAAAAAKAAgIAAAAABAAAMBAAAAAIAIAAAACAAAA=</HashCode>
+      <FileName>UI\Components\ProgressBar.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TheGame.UI.Components.RectangleShape">
+    <Position X="3.25" Y="23" Width="5.25" />
+    <InheritanceLine Type="TheGame.UI.Components.InterfaceComponent" ManuallyRouted="true">
+      <Path>
+        <Point X="21.75" Y="24.391" />
+        <Point X="21.75" Y="25.604" />
+        <Point X="9.61" Y="25.604" />
+        <Point X="9.61" Y="22.626" />
+        <Point X="5.875" Y="22.626" />
+        <Point X="5.875" Y="23" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABQCIAgAAAAAAAEAAABAAAAAAAAIAgAAAAAA=</HashCode>
+      <FileName>UI\Components\RectangleShape.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TheGame.UI.Components.Text">
+    <Position X="6.5" Y="30.75" Width="6.25" />
+    <InheritanceLine Type="TheGame.UI.Components.InterfaceComponent" ManuallyRouted="true">
+      <Path>
+        <Point X="21.75" Y="24.391" />
+        <Point X="21.75" Y="25.63" />
+        <Point X="9.625" Y="25.63" />
+        <Point X="9.625" Y="30.75" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAIIggAAAAAAAAAAEACAAAAAAAAAgAAAAAA=</HashCode>
+      <FileName>UI\Components\Text.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TheGame.MainGame">
+    <Position X="14.25" Y="1.25" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAhAAAoAFAYAAAJAAABAgAAAAAAACAABCAAAAAEQ=</HashCode>
+      <FileName>MainGame.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="TheGame.Screen.ScreenState">
+    <Position X="7.5" Y="19.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAAQAAAAAAAAAAUAAACCAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Screen\ScreenState.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
