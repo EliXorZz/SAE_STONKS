@@ -20,9 +20,8 @@ namespace TheGame.Manager
             _maps = new Map[]
             {
                 new Map(_game, "default"),
-                new Map(_game, "default")
+                new Map(_game, "new")
             };
-
 
             _mapIndex = 0;
             _currentMap = _maps[_mapIndex];
