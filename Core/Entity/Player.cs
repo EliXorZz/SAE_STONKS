@@ -67,10 +67,12 @@ namespace TheGame.Core
             _lastAttack = 0;
 
             _regenTime = 0;
+            _coopId = -1;
 
             int width = 300;
             int height = 40;
             int gap = 10;
+            
 
             _healthBar = new ProgressBar(
                 _game, ScreenState.InGame, 20, 20 + Id * (height + gap), width, height, 1,
@@ -239,6 +241,8 @@ namespace TheGame.Core
                     {
                         if (target.Id == CoopId)
                         {
+                            CoopId = -1;
+                            Position=  target.Position;
                             target.Saisie = false;
                             break;
                         }
