@@ -21,6 +21,8 @@ namespace TheGame.Core
         private float _ragdollCooldown;
 
         private int _healthSave;
+        private float _attackReload;
+       
 
         private ProgressBar _healthBar;
 
@@ -43,6 +45,8 @@ namespace TheGame.Core
                     8, 1, (float) Health / MaxHealth, String.Empty,
                     Color.Transparent, Color.Transparent, Color.DarkRed
                 );
+            AttackReload = 0;
+            
         }
 
         public Monster(MainGame game, string spriteName, float speed, int health, int damage, int damageCooldown)
@@ -64,6 +68,19 @@ namespace TheGame.Core
             set => _ragdoll = value;
         }
 
+        public float AttackReload
+        {
+            get
+            {
+                return this._attackReload;
+            }
+
+            set
+            {
+                this._attackReload = value;
+            }
+        }
+
         public override void Update(GameTime gameTime, Map map)
         {
             float elapsed = (float) gameTime.ElapsedGameTime.TotalMilliseconds;
@@ -75,7 +92,8 @@ namespace TheGame.Core
 
                 foreach (Player player in _game.PlayerManager.Players)
                 {
-                    if (GetDistanceBetweenEntity(player) < distance)
+                    
+                    if (GetDistanceBetweenEntity(player) < distance && !player.SwordMode)
                     {
                         distance = GetDistanceBetweenEntity(player);
                         target = player;
@@ -90,7 +108,7 @@ namespace TheGame.Core
                     Rectangle targetBounds = target.GetBounds();
                     Vector2 targetCenter = target.GetCenter();
 
-                    if (distance > monsterBounds.Width / 2)
+                    if (!IsAttack && distance > monsterBounds.Width / 2)
                     {
                         if (targetCenter.X < monsterCenter.X)
                         {
@@ -108,11 +126,11 @@ namespace TheGame.Core
                         Velocity.X = 0;
                         Animation = "idle";
                     }
-
+                    _attackReload += elapsed;
                     _attackDelay += elapsed;
                     _ragdollCooldown += elapsed;
 
-                    if (!IsAttack && monsterBounds.Intersects(targetBounds) && !Ragdoll && _attackDelay >= 1800)
+                    if (!IsAttack && monsterBounds.Intersects(targetBounds) && !Ragdoll && _attackDelay >= 1800 && AttackReload >= 2000)
                     {
                         _attack = true;
                         _attackDelay = 0;
@@ -128,7 +146,7 @@ namespace TheGame.Core
                     if (IsAttack && _attackDelay >= 1800)
                     {
                         _attack = false;
-
+                        AttackReload = 0;
                         if (monsterBounds.Intersects(targetBounds))
                             Attack(gameTime, target);
                     }
@@ -137,7 +155,7 @@ namespace TheGame.Core
                     {
                         _ragdoll = true;
                         _ragdollCooldown = 0;
-
+                        AttackReload = 0;
                         _healthSave = Health;
                     }
 

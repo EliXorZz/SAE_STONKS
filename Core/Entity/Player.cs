@@ -2,6 +2,11 @@
 using System.Diagnostics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended.Content;
+using MonoGame.Extended.Screens;
+using MonoGame.Extended.Serialization;
+using MonoGame.Extended.Sprites;
+using TheGame.Manager;
 using TheGame.Screen;
 using TheGame.UI.Components;
 
@@ -15,6 +20,9 @@ namespace TheGame.Core
         private int _id;
         private string _pseudo;
 
+        private bool _estSaisie;
+        private bool _saisie;
+
         private bool _swordMode;
         private int _swordDamage;
 
@@ -23,12 +31,18 @@ namespace TheGame.Core
         private float _attackDelay;
         private float _lastAttack;
 
+        private SpriteSheet _epes;
+        private SpriteSheet _persoSprite;
+
         private float _regenTime;
 
         private int _sens;
         private ProgressBar _healthBar;
 
         private float _cooldownTransformation;
+        private int _coopId;
+
+       
 
         public Player(MainGame game, PlayerControls controls, int id, string pseudo, Vector2 position, Color color)
             : base(game, "blue_character", position, 0.10f, 100, 15, 2000, color)
@@ -36,13 +50,16 @@ namespace TheGame.Core
             _game = game;
             _controls = controls;
 
+            _estSaisie = false;
+            _saisie = false;
+
             _sens = 1;
 
             _id = id;
             _pseudo = pseudo;
 
             _swordMode = false;
-            _swordDamage = 10;
+            _swordDamage = 40;
 
             _deadTime = 0;
 
@@ -61,6 +78,12 @@ namespace TheGame.Core
                 $"Player {Pseudo} | {Health}/{MaxHealth}",
                 Color.White, Color, new Color(Math.Min(Color.R + 100, 255), Math.Min(Color.G + 100, 255), Math.Min(Color.B + 100, 255))
             );
+
+            ScreenStateManager screenStateManager = game.ScreenStateManager;
+            GameScreen inGameScreen = screenStateManager.GetScreen(ScreenState.InGame);
+
+            PersoSprite = inGameScreen.Content.Load<SpriteSheet>($"sprites/blue_character/animations.sf", new JsonContentLoader());
+            Epes = inGameScreen.Content.Load<SpriteSheet>($"sprites/blue_character/animation2.sf", new JsonContentLoader());
         }
 
         public PlayerControls Controls
@@ -108,17 +131,101 @@ namespace TheGame.Core
             get => _cooldownTransformation;
         }
 
+        public bool Saisie
+        {
+            get
+            {
+                return this._saisie;
+            }
+
+            set
+            {
+                this._saisie = value;
+            }
+        }
+
+        public int CoopId
+        {
+            get
+            {
+                return this._coopId;
+            }
+
+            set
+            {
+                this._coopId = value;
+            }
+        }
+
+        public SpriteSheet Epes
+        {
+            get
+            {
+                return this._epes;
+            }
+
+            set
+            {
+                this._epes = value;
+            }
+        }
+
+        public SpriteSheet PersoSprite
+        {
+            get
+            {
+                return this._persoSprite;
+            }
+
+            set
+            {
+                this._persoSprite = value;
+            }
+        }
+
         public override void Update(GameTime gameTime, Map map)
         {
+
+
             if (!IsDead)
             {
+
                 float total = (float)gameTime.TotalGameTime.TotalMilliseconds;
                 float elapsed = (float)gameTime.ElapsedGameTime.Milliseconds;
+                Rectangle physique = GetBounds();
+
+
+                if (SwordMode)
+                {
+
+                    foreach (Player target in _game.PlayerManager.Players)
+                    {
+                        if (target.GetBounds().Intersects(physique) && !target.SwordMode)
+                        {
+                            CoopId = target.Id;
+                            _estSaisie = true;
+                            target.Saisie = true;
+                            break;
+                        }
+
+
+                    }
+                }
+                
+
+
+
+
+
+                _cooldownTransformation += elapsed;
 
                 if (Controls.IsTransform() && !SwordMode && _cooldownTransformation >= 500)
                 {
                     SwordMode = true;
                     _cooldownTransformation = 0;
+
+                    Sprite = new AnimatedSprite(Epes);
+
 
                 }
                 else if (Controls.IsTransform() && SwordMode && _cooldownTransformation >= 500)
@@ -126,123 +233,202 @@ namespace TheGame.Core
                     SwordMode = false;
                     _cooldownTransformation = 0;
 
+                    _estSaisie = false;
+
+                    foreach (Player target in _game.PlayerManager.Players)
+                    {
+                        if (target.Id == CoopId)
+                        {
+                            target.Saisie = false;
+                            break;
+                        }
+
+
+                    }
+
+
+                    Sprite = SpriteSauv;
+                    Animation = "idle";
 
                 }
 
-                _cooldownTransformation += elapsed;
 
-                if (Controls.IsAttack() && !SwordMode)
+                if(CooldownTransformation <=1200 && SwordMode)
                 {
-                    foreach (Monster monster in _game.MonsterManager.Monsters)
-                    {
-                        Rectangle playerBounds = GetBounds();
-                        Rectangle monsterBounds = monster.GetBounds();
-
-                        if (monsterBounds.Intersects(playerBounds))
-                            Attack(monster, gameTime);
-                    }
+                    Animation = "transformation";
+                }
+                else if (SwordMode)
+                {
+                    Animation = "arme";
                 }
 
-                if (Controls.IsLeft() && !SwordMode)
+                if (!_estSaisie)
                 {
-                    _sens = -1;
-                    Velocity.X = -1;
 
-                    if (Controls.IsAttack())
+                    if (Controls.IsAttack() && !SwordMode)
                     {
-                        _game.SoundManager.PlayEffect("sword", gameTime);
-                        Animation = "combatG";
+                        foreach (Monster monster in _game.MonsterManager.Monsters)
+                        {
+                            Rectangle playerBounds = GetBounds();
+                            Rectangle monsterBounds = monster.GetBounds();
+
+                            if (monsterBounds.Intersects(playerBounds))
+                                Attack(monster, gameTime);
+                        }
                     }
-                    else
+
+                    if (Controls.IsLeft() && !SwordMode)
                     {
-                        if (IsCollisionMap(map, 0, 1) && !SwordMode) _game.SoundManager.PlayEffect("pas", gameTime);
-                        Animation = "courseG";
+                        _sens = -1;
+                        Velocity.X = -1;
+
+                        if (Controls.IsAttack())
+                        {
+                            _game.SoundManager.PlayEffect("sword", gameTime);
+                            Animation = "combatG";
+                        }
+                        else
+                        {
+                            if (IsCollisionMap(map, 0, 1) && !SwordMode) _game.SoundManager.PlayEffect("pas", gameTime);
+                            Animation = "courseG";
+
+                        }
+
 
                     }
-                        
-
-                }
-                else if (Controls.IsRight() && !SwordMode)
-                {
-                    _sens = 1;
-                    Velocity.X = 1;
-
-                    if (Controls.IsAttack())
+                    else if (Controls.IsRight() && !SwordMode)
                     {
-                        _game.SoundManager.PlayEffect("sword", gameTime);
-                        Animation = "combatD";
+                        _sens = 1;
+                        Velocity.X = 1;
+
+                        if (Controls.IsAttack())
+                        {
+                            _game.SoundManager.PlayEffect("sword", gameTime);
+                            Animation = "combatD";
+                        }
+                        else
+                        {
+                            if (IsCollisionMap(map, 0, 1) && !SwordMode) _game.SoundManager.PlayEffect("pas", gameTime);
+                            Animation = "courseD";
+                        }
+
                     }
-                    else
+                    else if (!SwordMode)
                     {
-                        if(IsCollisionMap(map, 0, 1) && !SwordMode) _game.SoundManager.PlayEffect("pas", gameTime);
-                        Animation = "courseD";
+                        Velocity.X = 0;
+
+                        if (Controls.IsAttack() && _sens == 1)
+                        {
+
+                            _game.SoundManager.PlayEffect("sword", gameTime);
+                            if (Saisie)
+                            {
+                                Animation = "combatGe";
+                            }
+                            else
+                            {
+                                Animation = "combatD";
+                            }
+                        }
+
+
+                        else if (Controls.IsAttack() && _sens == -1)
+                        {
+                            _game.SoundManager.PlayEffect("sword", gameTime);
+                            if (Saisie)
+                            {
+                                Animation = "combatDe";
+
+                            }
+                            else if (!Saisie)
+                            {
+
+                                Animation = "combatG";
+                            }
+                        }
+
+                        else
+                            if (Saisie)
+                        {
+                            if (_sens == 1)
+                            {
+                                Animation = "idleDe";
+
+                            }
+                            else
+                            {
+                                Animation = "idleGe";
+                            }
+
+                        }
+                        else
+                        {
+                            if (_sens == 1)
+                            {
+                                Animation = "idle";
+
+                            }
+                            else
+                            {
+                                Animation = "idleG";
+                            }
+                        }
                     }
-                        
+
+                    if (Controls.IsJump() && IsCollisionMap(map, 0, 1) && !SwordMode)
+                        Velocity.Y = -3;
+
+                    if (Health < MaxHealth && _lastAttack + 6000 < total)
+                    {
+                        _regenTime += elapsed;
+
+                        if (_regenTime >= 1500)
+                        {
+                            int newHealth = 2;
+
+                            Health = Math.Min(MaxHealth, Health + newHealth);
+
+                            AddFadeInterfaceComponent(
+                            200,
+                            1500,
+                            new Vector2(0, -3),
+                            new Text(_game, ScreenState.InGame, "font_small", 0, 0, $"+{newHealth}", Color.Green));
+
+                            _regenTime = 0;
+                        }
+                    }
+
+                    _healthBar.Progress = (float)Health / MaxHealth;
+                    _healthBar.Input = $"Player {Pseudo} | {Health}/{MaxHealth}";
+
+                    _healthBar.Update();
                 }
                 else if (!SwordMode)
                 {
-                    Velocity.X = 0;
+                    elapsed = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
 
-                    if (Controls.IsAttack() && _sens == 1)
+                    if (_deadTime < 800)
                     {
-                        _game.SoundManager.PlayEffect("sword", gameTime);
-                        Animation = "combatD";
-                    }
+                        _deadTime += elapsed;
+                        Animation = "death";
 
-                        
-                    else if (Controls.IsAttack() && _sens == -1)
-                    {
-                        _game.SoundManager.PlayEffect("sword", gameTime);
-                        Animation = "combatG";
+                        Sprite.Alpha = _deadTime / 800;
                     }
-                        
                     else
-                        Animation = "idle";
-                }
-
-                if (Controls.IsJump() && IsCollisionMap(map, 0, 1) && !SwordMode)
-                    Velocity.Y = -3;
-
-                if (Health < MaxHealth && _lastAttack + 6000 < total)
-                {
-                    _regenTime += elapsed;
-
-                    if (_regenTime >= 1500)
                     {
-                        int newHealth = 2;
-
-                        Health = Math.Min(MaxHealth, Health + newHealth);
-
-                        AddFadeInterfaceComponent(
-                        200,
-                        1500,
-                        new Vector2(0, -3),
-                        new Text(_game, ScreenState.InGame, "font_small", 0, 0, $"+{newHealth}", Color.Green));
-
-                        _regenTime = 0;
+                        _game.PlayerManager.RemovePlayer(this);
                     }
                 }
-
-                _healthBar.Progress = (float)Health / MaxHealth;
-                _healthBar.Input = $"Player {Pseudo} | {Health}/{MaxHealth}";
-
-                _healthBar.Update();
-            }
-            else if (!SwordMode)
-            {
-                float elapsed = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
-
-                if (_deadTime < 800)
+                if (_estSaisie)
                 {
-                    _deadTime += elapsed;
-                    Animation = "death";
-
-                    Sprite.Alpha = _deadTime / 800;
+                    Sprite.IsVisible = false;
                 }
                 else
                 {
-                    _game.PlayerManager.RemovePlayer(this);
+                    Sprite.IsVisible = true;
                 }
+
+
             }
 
             base.Update(gameTime, map);
@@ -250,6 +436,7 @@ namespace TheGame.Core
 
         public override void Draw(SpriteBatch spriteBatch, SpriteBatch globalUIBatch)
         {
+
             _healthBar.Draw(globalUIBatch);
             base.Draw(spriteBatch, globalUIBatch);
         }
@@ -258,13 +445,22 @@ namespace TheGame.Core
         {
             float elapsed = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
             _attackDelay += elapsed;
-
+            int realDamage = 0;
             if (_attackDelay >= 1800)
             {
                 _attackDelay = 0;
 
                 Random _random = new Random();
-                int realDamage = _random.Next(1, Damage);
+                if (Saisie)
+                {
+                    realDamage = _random.Next(3, this.SwordDamage);
+
+                }
+                else
+                {
+
+                    realDamage = _random.Next(10, Damage);
+                }
 
                 entity.Health -= realDamage;
 
@@ -274,6 +470,11 @@ namespace TheGame.Core
                     new Vector2(0, -3),
                     new Text(_game, ScreenState.InGame, "font_small", 0, 0, $"-{realDamage}", Color.Red));
             }
+        }
+        public Rectangle GetBoundplayer()
+        {
+            return new Rectangle((int)Position.X, (int)Position.Y,
+                Sprite.TextureRegion.Width, Sprite.TextureRegion.Height);
         }
 
     }
