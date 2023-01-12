@@ -25,6 +25,7 @@ namespace TheGame.Manager
             _sounds.Add(new Sound(_game, "SE", 1.8, "sword"));
             _sounds.Add(new Sound(_game, "SE", 0.42, "pas"));
             _sounds.Add(new Sound(_game, "OST", 0, "main"));
+            _sounds.Add(new Sound(_game, "SE", 0.2, "click"));
         }
 
         public void LoadContent(MainGame game)

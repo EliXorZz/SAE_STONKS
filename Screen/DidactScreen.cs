@@ -50,8 +50,6 @@ namespace TheGame.Screen
         public override void Update(GameTime gameTime)
         {
             
-            _game.SoundManager.PlayEffect("main", gameTime);
-
             foreach (Button button in _buttons)
                 button.Update(gameTime);
         }
